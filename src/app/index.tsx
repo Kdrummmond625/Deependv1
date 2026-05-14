@@ -1,98 +1,112 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { AppButton } from "@/components/AppButton";
+import { AppScreen } from "@/components/AppScreen";
+import { HeaderGear } from "@/components/HeaderGear";
+import { SettingsModal } from "@/components/SettingsModal";
+import { colors } from "@/constants/colors";
+import { spacing } from "@/constants/spacing";
+import { typography } from "@/constants/typography";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function IndexScreen() {
+  const { isLoading, hasCompletedOnboarding } = useOnboardingStatus();
+  const [settingsVisible, setSettingsVisible] = useState(false);
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!hasCompletedOnboarding) {
+      router.replace("/onboarding");
+    }
+  }, [isLoading, hasCompletedOnboarding]);
+
+  if (isLoading) {
     return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+      <AppScreen>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator color={colors.gold} />
+        </View>
+      </AppScreen>
     );
   }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+
+  if (!hasCompletedOnboarding) {
+    return null;
+  }
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <AppScreen>
+      <View style={styles.container}>
+        <View style={styles.topRow}>
+          <View />
+          <HeaderGear onPress={() => setSettingsVisible(true)} />
+        </View>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+        <View style={styles.centerContent}>
+          <Text style={styles.logo}>DEEP END</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <Text style={styles.body}>
+            Everyday situations.{"\n"}Choices you have to say out loud.
+          </Text>
+        </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+        <View style={styles.actions}>
+          <AppButton title="START GAME" onPress={() => router.push("/setup")} />
+
+          <AppButton
+            title="HOW TO PLAY"
+            variant="secondary"
+            onPress={() => router.push("/onboarding")}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <SettingsModal
+          visible={settingsVisible}
+          onClose={() => setSettingsVisible(false)}
+          showEndGame={false}
+        />
+      </View>
+    </AppScreen>
   );
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    justifyContent: "space-between",
   },
-  safeArea: {
+  topRow: {
+    height: 44,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  centerContent: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.lg,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  logo: {
+    ...typography.title,
+    color: colors.cream,
+    textAlign: "center",
+    letterSpacing: 2,
   },
-  title: {
-    textAlign: 'center',
+  body: {
+    ...typography.body,
+    color: colors.mutedCream,
+    textAlign: "center",
   },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  actions: {
+    gap: spacing.md,
+    paddingBottom: spacing.lg,
   },
 });

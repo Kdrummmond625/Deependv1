@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "101",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone goes quiet mid-conversation.\nDo you think something’s wrong, or nothing at all?"
+  },
+  {
+    "id": "102",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone’s actions affect you, but their intent is unclear. Do you assume they meant well or wait for proof?"
+  },
+  {
+    "id": "103",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something feels obvious to you. Do you still ask or trust your read?"
+  },
+  {
+    "id": "104",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone explains their side, but parts still feel unclear. Do you ask more or fill in the rest yourself?"
+  },
+  {
+    "id": "105",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When someone says “maybe,” do you hear interest\nor hesitation?"
+  },
+  {
+    "id": "106",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When something feels unclear, do you ask what they meant\nor decide what it meant yourself?"
+  },
+  {
+    "id": "107",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Which causes more problems:\nnot asking… or asking too soon?"
+  },
+  {
+    "id": "108",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You need clarity from someone. Do you ask to understand the situation or to know where you stand?"
+  },
+  {
+    "id": "109",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "What feels riskier:\nassuming or asking and not liking the answer?"
+  },
+  {
+    "id": "110",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When something feels off, do you think it’s about you\nor about them?"
+  },
+  {
+    "id": "111",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone makes a decision you don’t understand. Do you ask why or decide what it says about them?"
+  },
+  {
+    "id": "112",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When someone gives you a vague answer, do you ask for clarity\nor work with what they said?"
+  },
+  {
+    "id": "113",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone reacts differently than you would. Do you ask how they see it or assume they are wrong?"
+  },
+  {
+    "id": "114",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When something goes wrong, do you ask what happened\nor assume you already know?"
+  },
+  {
+    "id": "115",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When someone goes quiet, do you think they’re still deciding\nor already decided?"
+  },
+  {
+    "id": "116",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When you don’t know where you stand, do you ask directly\nor read their behavior?"
+  },
+  {
+    "id": "117",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something matters to you, but they have not noticed. Do you ask for it or assume they should know?"
+  },
+  {
+    "id": "118",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone misunderstands you. Do you explain again or assume they are not trying to understand?"
+  },
+  {
+    "id": "119",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When you don’t know something, do you ask right away\nor wait to see if it becomes clear?"
+  },
+  {
+    "id": "120",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "When someone says nothing, do you take it as agreement\nor discomfort?"
+  },
+  {
+    "id": "121",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone’s tone shifts mid-conversation.\nDo you say something or decide what it means?"
+  },
+  {
+    "id": "122",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You’re not sure if something’s okay.\nDo you ask or just go with it?"
+  },
+  {
+    "id": "123",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Plans feel unclear.\nDo you ask for details or assume it’ll work out?"
+  },
+  {
+    "id": "124",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something feels off.\nDo you question it or assume there’s a reason?"
+  },
+  {
+    "id": "125",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone starts acting distant. Do you ask what changed or assume they need space?"
+  },
+  {
+    "id": "126",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something they said doesn’t sit right.\nDo you ask what they meant or go with how it felt"
+  },
+  {
+    "id": "127",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You’re confused about what’s going on.\nDo you ask or try to figure it out yourself?"
+  },
+  {
+    "id": "128",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Things seem fine on the surface.\nDo you check in or assume you’re good?"
+  },
+  {
+    "id": "129",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something important goes unsaid. Do you ask about it or assume there is a reason nobody mentioned it?"
+  },
+  {
+    "id": "130",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You haven’t heard from someone in a while.\nDo you ask how they are or assume they're fine?"
+  },
+  {
+    "id": "131",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "No one’s said where the line is.\nDo you ask or test it yourself?"
+  },
+  {
+    "id": "132",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "No one’s speaking up.\nDo you check in  or assume everyone’s okay?"
+  },
+  {
+    "id": "133",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Something didn’t go how you expected.\nDo you ask what happened or assume they didn’t care?"
+  },
+  {
+    "id": "134",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "They say “I’m fine,” but something feels off. Do you ask again or take them at their word?"
+  },
+  {
+    "id": "135",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone starts acting different around you.\nDo you ask what’s going on or decide why?"
+  },
+  {
+    "id": "136",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "A friend cancels last minute. Do you ask for context or decide what it means?"
+  },
+  {
+    "id": "137",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You hear laughter after you walk out the room. Do you ask about it or assume it involved you?"
+  },
+  {
+    "id": "138",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone exits the group chat with no warning. Do you check in or make your own meaning?"
+  },
+  {
+    "id": "139",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You walk in and everyone gets quiet. Do you ask or decide what the silence means?"
+  },
+  {
+    "id": "140",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "A post feels too familiar to ignore. Do you question it or make the connection yourself?"
+  },
+  {
+    "id": "141",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Someone who was always around suddenly disappears. Do you reach out or decide what it means?"
+  },
+  {
+    "id": "142",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Their reaction seems smaller than the moment. Do you ask or decide what the calm means?"
+  },
+  {
+    "id": "143",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Plans come up, but no one locks anything in. Do you ask for details or assume it is not serious?"
+  },
+  {
+    "id": "144",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You hear something about yourself from someone else. Do you ask the source or assume why it was not said to you?"
+  },
+  {
+    "id": "145",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "A shared routine disappears without discussion. Do you bring it up or decide what it means?"
+  },
+  {
+    "id": "146",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "They change the subject after you get vulnerable. Do you question it or take it as a sign?"
+  },
+  {
+    "id": "147",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "Their reply feels too short for what you sent. Do you ask or decide what the short response means?"
+  },
+  {
+    "id": "148",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "They say “we need to talk,” but don’t say when. Do you ask for clarity or does your mind fill it in?"
+  },
+  {
+    "id": "149",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "You find out people made plans without you. Do you ask about it or decide what it means?"
+  },
+  {
+    "id": "150",
+    "deckId": "ask_assume",
+    "type": "question",
+    "prompt": "They start moving differently with you. Do you ask what happened or assume you already know?"
+  },
+  {
+    "id": "201",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A group tradition stopped feeling good a while ago. Do you let it end or keep showing up because everyone expects it?"
+  },
+  {
+    "id": "202",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "An old friendship ended without a real fight. Do you hold onto the good version or accept what it became?"
+  },
+  {
+    "id": "203",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Staying drains you, but leaving means losing what you built. Do you keep what exists or start over?"
+  },
+  {
+    "id": "204",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Which is harder to accept: forgetting something mattered or realizing it no longer does?"
+  },
+  {
+    "id": "205",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You stopped reaching out first and noticed the connection disappearing. Do you let it fade or keep reaching out?"
+  },
+  {
+    "id": "206",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You bought into an idea before seeing the full cost. Do you keep backing it or admit you no longer support it?"
+  },
+  {
+    "id": "207",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A situation keeps giving you partial answers. Do you keep searching for clarity or let the missing pieces stay missing?"
+  },
+  {
+    "id": "208",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A side hustle is taking more than it returns. Do you keep building it or put that energy somewhere else?"
+  },
+  {
+    "id": "209",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A place feels familiar but no longer feels like home. Do you stay because you know it or leave because you outgrew it?"
+  },
+  {
+    "id": "210",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A strategy almost worked once, do you keep returning to it or update the strategy?"
+  },
+  {
+    "id": "211",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A friendship keeps recovering but never improving. Do you keep repairing it or let it end naturally?"
+  },
+  {
+    "id": "212",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You left something that looked good from the outside. Do you keep defending the choice or release the need to explain it?"
+  },
+  {
+    "id": "213",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A dream changed, but part of you still wants the version you first imagined. Do you keep chasing it or update the vision?"
+  },
+  {
+    "id": "214",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You stopped caring about a project and need to decide if you will officially quit. Do you keep pretending it matters or admit it is over?"
+  },
+  {
+    "id": "215",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You chose a path that made sense then but not now. Do you honor the original choice or change course?"
+  },
+  {
+    "id": "216",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Keeping the friendship avoids conflict, but releasing it gives you peace. Which cost matters more?"
+  },
+  {
+    "id": "217",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Which is harder to let go of\nwhat you invested or what you imagined?"
+  },
+  {
+    "id": "218",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A habit still comforts you, but it keeps slowing you down. Do you keep the comfort or release the habit?"
+  },
+  {
+    "id": "219",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Which do you think about more\nwhat you kept or what you let go of?"
+  },
+  {
+    "id": "220",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You keep clothes from a version of yourself you no longer dress like. Do you keep them or clear the space?"
+  },
+  {
+    "id": "221",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "When something stops working, do you fight for it or accept it?"
+  },
+  {
+    "id": "222",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Leaving your job would create uncertainty, but staying keeps draining you. Do you keep the known stress or choose the unknown?"
+  },
+  {
+    "id": "223",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You have already spent months building something, but the results are weak. Do you keep investing or stop adding more?"
+  },
+  {
+    "id": "224",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You kept a friendship alive through multiple seasons. Do you focus on how long it lasted or why it ended?"
+  },
+  {
+    "id": "225",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A habit is not destroying you, but it is not helping you either. Do you keep it or release it?"
+  },
+  {
+    "id": "226",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You might be making a decision too soon, but waiting might make you resent the situation. Which risk do you take?"
+  },
+  {
+    "id": "227",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "The memory feels better than the reality was. Do you hold onto the memory or release the version your mind protected?"
+  },
+  {
+    "id": "228",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You still check an old page even though the connection is over. Do you keep looking or cut the habit?"
+  },
+  {
+    "id": "229",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Staying in your old role keeps things simple. Leaving it changes how people relate to you. Which do you choose?"
+  },
+  {
+    "id": "230",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You still talk about what it used to be. Do you stay because of the memory or because the future still feels possible?"
+  },
+  {
+    "id": "231",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Your family accepts you more when you do not challenge the role they gave you. Do you keep shrinking or release the role?"
+  },
+  {
+    "id": "232",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You know the real story, but telling it would change how people see someone. Do you keep protecting them or let the truth stand?"
+  },
+  {
+    "id": "233",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "When the version you wanted still has not arrived, do you wait or accept the one in front of you?"
+  },
+  {
+    "id": "234",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Do you stay because leaving hurts or leave because staying does?"
+  },
+  {
+    "id": "235",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You feel done with a role, but cannot explain why cleanly. Do you stay until it makes sense or release it?"
+  },
+  {
+    "id": "236",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You never got a real ending from an old friend. Do you keep waiting for the conversation or close it yourself?"
+  },
+  {
+    "id": "237",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A plan keeps almost coming together. Do you keep holding space for it or move forward without it?"
+  },
+  {
+    "id": "238",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "The door is still open because closing it feels harsh. Do you keep the access or adjust the boundary?"
+  },
+  {
+    "id": "239",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Changing course feels like admitting the first plan failed. Do you keep proving it can work or update it?"
+  },
+  {
+    "id": "240",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A situation gives you just enough to keep you from leaving. Do you keep the little you get or leave and look for what is missing?"
+  },
+  {
+    "id": "241",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A person meant well but kept hurting you the same way. Do you keep making room for intent or walk away from the relationship?"
+  },
+  {
+    "id": "242",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A team expects your loyalty but does not protect you back. Do you keep showing up or step away?"
+  },
+  {
+    "id": "243",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Saying nothing keeps everything moving, but the issue keeps repeating. Do you keep working around it or name it?"
+  },
+  {
+    "id": "244",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A friend needs support, but being their support keeps pulling you back into old patterns. Do you stay involved or step back?"
+  },
+  {
+    "id": "245",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You already gave the friendship chances, but leaving still feels harsh. Do you keep proving effort or stop?"
+  },
+  {
+    "id": "246",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You spent years building a skill you no longer want to use. Do you keep going because of the time or choose a new direction?"
+  },
+  {
+    "id": "247",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You are almost done, but finishing no longer serves the goal. Do you complete it or change the plan?"
+  },
+  {
+    "id": "248",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "A goal matters deeply, but chasing it keeps damaging your life. Do you protect the goal or release it?"
+  },
+  {
+    "id": "249",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "You may question the change later, but you arent happy with the current choice now. Do you keep it or move differently?"
+  },
+  {
+    "id": "250",
+    "deckId": "keep_release",
+    "type": "question",
+    "prompt": "Something has potential, but the same problem returns. Do you keep betting on potential or change the structure?"
+  },
+  {
+    "id": "301",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone only knows what you used to be tied to. Do you give context or let the present correct the story?"
+  },
+  {
+    "id": "302",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "An old issue comes up during a current conversation. Do you treat it like history or part of what is happening now?"
+  },
+  {
+    "id": "303",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "What happened before is warning you. What is happening now is showing you something else. Which gets more weight?"
+  },
+  {
+    "id": "304",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone made a mistake before they knew better. Do you judge the old choice or the person they are now?"
+  },
+  {
+    "id": "305",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Looking back gives you answers, but it also changes how you see the present. Do you use the history or stay with what is happening now?"
+  },
+  {
+    "id": "306",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone still talks to you like who you used to be. Do you correct them or let your present behavior show the difference?"
+  },
+  {
+    "id": "307",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You go back to something that used to comfort you, but it does not feel the same now. Do you trust the memory or the present feeling?"
+  },
+  {
+    "id": "308",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Looking back steadies you, but it also brings old feelings into the present. Do you continue revisiting it or leave it behind?"
+  },
+  {
+    "id": "309",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Your past explains why you reacted, but the present still needs repair. Do you focus on where it came from or what it caused?"
+  },
+  {
+    "id": "310",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Which is harder to sit with: what happened or what you did with it?"
+  },
+  {
+    "id": "311",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "A current choice brings up an old warning sign. Do you trust what you have been through or what is actually happening now?"
+  },
+  {
+    "id": "312",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "When the present looks like the past, do you look back for answers or stay with what just happened?"
+  },
+  {
+    "id": "313",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Which do you feel more responsible to: past commitments or present needs?"
+  },
+  {
+    "id": "314",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone does something that reminds you of an old pattern. Do you respond to what they did today or what you remember from before?"
+  },
+  {
+    "id": "315",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "New information changes how an old situation looks. Do you update the story or keep the version you have lived with?"
+  },
+  {
+    "id": "316",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "What you expected before does not match what is happening now. Do you judge the present by the old expectation or adjust?"
+  },
+  {
+    "id": "317",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "To understand someone’s current choice, do you ask where it came from or their reason in that moment?"
+  },
+  {
+    "id": "318",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone’s past gives context, but their current behavior gives evidence. Which explains them better?"
+  },
+  {
+    "id": "319",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The reaction does not match the situation. Do you look for the past reasoning underneath it or respond to what is infront of you?"
+  },
+  {
+    "id": "320",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You are comparing where you are to where you began. Do you focus on distance traveled or what is still ahead?"
+  },
+  {
+    "id": "321",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone is using your track record to predict what you can do now. Do you accept the history or point to what has changed?"
+  },
+  {
+    "id": "322",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You want distance from your past. Do you carry it with context or leave it behind?"
+  },
+  {
+    "id": "323",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone’s history and current behavior are telling different stories. Which one do you defend?"
+  },
+  {
+    "id": "324",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You can explain why you chose it then, but the impact did not stay in the past. Do you ask for context to matter or accept the consequence?"
+  },
+  {
+    "id": "325",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone’s past and present both feel true. Which one gets to define them now?"
+  },
+  {
+    "id": "326",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Something old still influences how you move now. Do you acknowledge it or respond without it?"
+  },
+  {
+    "id": "327",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone expects you to keep a past agreement. Do you respect what you said then or what matters now?"
+  },
+  {
+    "id": "328",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The present is repeating the past closley but not exactly. Do you compare or separate them?"
+  },
+  {
+    "id": "329",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Looking back shows how far you came and what you lost. Which one do you notice first?"
+  },
+  {
+    "id": "330",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The memory says it should still work, but the present keeps showing otherwise. Do you keep believing the memory or adjust to the evidence?"
+  },
+  {
+    "id": "331",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Waiting for the version of them that hasn't shown up yet"
+  },
+  {
+    "id": "332",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The present is making you reinterpret the past. Do you protect the old meaning or let it change?"
+  },
+  {
+    "id": "333",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You are being blamed for the current mess, but the history is bigger than you. Do you explain the past or handle the present?"
+  },
+  {
+    "id": "334",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "What they said before gave you hope. What they are doing now gives you evidence. Which counts more?"
+  },
+  {
+    "id": "335",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "A person has been consistent lately, but their history still makes people cautious. Do you trust the recent pattern or the old one?"
+  },
+  {
+    "id": "336",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Someone’s history gives context, but their present actions still affect the room. Do you focus on what shaped them or what they are doing now?"
+  },
+  {
+    "id": "337",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Something painful shaped you, but the present is asking you to move without a perfect reason. Do you keep searching for meaning or move on?"
+  },
+  {
+    "id": "338",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The beginning shaped your view, but the present has more evidence. Do you keep the first impression or update it?"
+  },
+  {
+    "id": "339",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "A family keeps explaining today’s tension through something that happened years ago. Do you keep using the old context or address the current pattern?"
+  },
+  {
+    "id": "340",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Your history is being used as the final explanation. Do you accept it or show what has changed?"
+  },
+  {
+    "id": "341",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You do not want growth to erase where you came from. Do you keep proving you remember it or live beyond it?"
+  },
+  {
+    "id": "342",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You are known for wanting something you no longer want. Do you keep performing the old desire or let the present be different?"
+  },
+  {
+    "id": "343",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The relationship used to feel different. Do you try to restore it or accept what it became?"
+  },
+  {
+    "id": "344",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You are outgrowing something that once helped you. Do you keep it because it mattered then or change because it limits you now?"
+  },
+  {
+    "id": "345",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You made a decision then that you would not make now. Do you defend the old choice or admit it wasnt the best decision?"
+  },
+  {
+    "id": "346",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You are becoming someone your past self would not recognize. Do you slow down or trust the change?"
+  },
+  {
+    "id": "347",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "You want people to understand who you are. Do you keep defending the past or move from the present?"
+  },
+  {
+    "id": "348",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "Moving on makes it look like you no longer care. Do you keep proving it mattered or let the present be different?"
+  },
+  {
+    "id": "349",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "The commitment had meaning then, but it costs too much now. Do you honor the past or respond to the present?"
+  },
+  {
+    "id": "350",
+    "deckId": "past_present",
+    "type": "question",
+    "prompt": "A situation has changed, but everyone keeps using the old rules. Do you follow what made sense then or what works now?"
+  },
+  {
+    "id": "401",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Their effort increases once you become less available. Does that pull you in or make you question the timing?"
+  },
+  {
+    "id": "402",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They do not crowd you, but they also do not chase you. Does that feel peaceful or uncertain?"
+  },
+  {
+    "id": "403",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "A connection starts changing fast. Do you trust the speed or question what is driving it?"
+  },
+  {
+    "id": "404",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone is steady, but not intense. Does that feel safe or boring?"
+  },
+  {
+    "id": "405",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You miss someone, but the last move was yours. Do you reach again or let the silence test the connection?"
+  },
+  {
+    "id": "406",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Things are going well, and you feel yourself wanting more. Do you enjoy the pace or start looking for reassurance?"
+  },
+  {
+    "id": "407",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They do not say much, but they do not leave the moment either. Do you count that as care or not enough?"
+  },
+  {
+    "id": "408",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "After an argument, they want to solve it and you want reassurance first. Which matters more in the moment?"
+  },
+  {
+    "id": "409",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone is inconsistent but never fully absent. Is that more confusing than someone who disappears completely?"
+  },
+  {
+    "id": "410",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They are warm when present, but noticeably absent when not. Do you believe the attention or the withdrawal?"
+  },
+  {
+    "id": "411",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You are unsure about someone, but being around them feels good. Do you stay in the feeling or slow yourself down?"
+  },
+  {
+    "id": "412",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone becomes less available, and suddenly you want them more. Do you want them, or do you want the attention back?"
+  },
+  {
+    "id": "413",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Things feel uncertain, and your instinct is to do something. Are you acting from interest or anxiety?"
+  },
+  {
+    "id": "414",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone becomes more available after being distant. Do you respond to the new effort or remember the gap?"
+  },
+  {
+    "id": "415",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You are interested, but they are not making a clear move. Do you show interest or wait to be chosen?"
+  },
+  {
+    "id": "416",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You want to know if the connection is real. Do you stay consistent or see what happens when you stop giving so much?"
+  },
+  {
+    "id": "417",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You can have the full connection, but there is no chase. Does that make it feel secure or less exciting?"
+  },
+  {
+    "id": "418",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Tension builds, and neither of you names it. Does the silence make the connection stronger or heavier?"
+  },
+  {
+    "id": "419",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone becomes more appealing when they feel slightly out of reach. Do you trust that attraction?"
+  },
+  {
+    "id": "420",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "When someone is hard to pin down, does that make you more interested or less available?"
+  },
+  {
+    "id": "421",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone asks for space but still wants reassurance that you care. Is that fair or confusing?"
+  },
+  {
+    "id": "422",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "The connection starts feeling serious, and suddenly every flaw feels louder. Is that discernment or retreat?"
+  },
+  {
+    "id": "423",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone gives less than you need but more than nothing. Does that keep you invested or make you step back?"
+  },
+  {
+    "id": "424",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "The connection feels calm instead of intense. Do you read that as peace or lack of chemistry?"
+  },
+  {
+    "id": "425",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They are not gone, but they are not as present. Do you stay consistent or adjust to the new rhythm?"
+  },
+  {
+    "id": "426",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They are ready for more before you expected it. Does that feel flattering or too much?"
+  },
+  {
+    "id": "427",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone only becomes expressive when there is distance between you. Does the space make them feel safer or make the connection harder to trust?"
+  },
+  {
+    "id": "428",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You feel overwhelmed and start becoming less available. Do you see that as regulation or withdrawal?"
+  },
+  {
+    "id": "429",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You feel overwhelmed, and someone wants to be close. Do you let them in or need room first?"
+  },
+  {
+    "id": "430",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "You want more effort, but asking for it feels different than receiving it naturally. Do you ask or wait to see what they offer?"
+  },
+  {
+    "id": "431",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They get quiet mid-argument, and the silence changes the whole tone. Do you read it as processing or checking out?"
+  },
+  {
+    "id": "432",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They minimize something that matters to you, then act like the connection is fine. Do you accept the closeness or notice the gap?"
+  },
+  {
+    "id": "433",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "The connection wakes up when you stop feeding it. Does that pull you back in or make you less interested?"
+  },
+  {
+    "id": "434",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They turn serious questions into jokes right when the moment gets real. Does that feel playful or avoidant?"
+  },
+  {
+    "id": "435",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "After conflict, they return to normal before anything is repaired. Does that feel comforting or incomplete?"
+  },
+  {
+    "id": "436",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They ask something personal out of nowhere. Does sudden depth feel exciting or invasive?"
+  },
+  {
+    "id": "437",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone asks for space but leaves the timeline open. Does that feel respectful or like being kept waiting?"
+  },
+  {
+    "id": "438",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They reply slowly, but the replies have effort. Do you trust the quality or notice the delay?"
+  },
+  {
+    "id": "439",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone finally opens up when you are almost done trying. Does that feel meaningful or convenient?"
+  },
+  {
+    "id": "440",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone reappears with warmth but no explanation for the silence. Do you trust the ease or notice what went unspoken?"
+  },
+  {
+    "id": "441",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "A friend cancels last minute but immediately reschedules. Does the repair matter more than the cancellation?"
+  },
+  {
+    "id": "442",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone who used to be warm with you suddenly feels harder to reach. Do you treat it as a mood or a message?"
+  },
+  {
+    "id": "443",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone criticizes you in a joking tone. Do you take it as play or pay attention to what slipped out?"
+  },
+  {
+    "id": "444",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "A person you guided disappears after becoming more independent. Does that feel natural or dismissive?"
+  },
+  {
+    "id": "445",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone treats the connection differently depending on who is watching. Do you trust the private version or the public one?"
+  },
+  {
+    "id": "446",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone’s closeness depends on crisis. Does that make the bond feel real or conditional?"
+  },
+  {
+    "id": "447",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone stops texting you directly but still reacts to everything you post. Does that feel like distance or quiet attention?"
+  },
+  {
+    "id": "448",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "A family member only calls when they need something"
+  },
+  {
+    "id": "449",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "Someone is casual in person but intense over text. Do you trust the depth they show privately or the distance you feel face-to-face?"
+  },
+  {
+    "id": "450",
+    "deckId": "push_pull",
+    "type": "question",
+    "prompt": "They show up for you publicly but not personally. Which version feels more real?"
+  },
+  {
+    "id": "501",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone shares something personal with you first. Do you match their openness or keep your pace?"
+  },
+  {
+    "id": "502",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone crosses a line, then asks for another chance. Do you offer grace or make the consequence clear?"
+  },
+  {
+    "id": "503",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone is close enough to notice your needs but keeps missing them. Do you name what you need or stop making it available to miss?"
+  },
+  {
+    "id": "504",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You can explain yourself fully, but being left alone would feel safer. Do you give context or choose privacy?"
+  },
+  {
+    "id": "505",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You need help, but asking would expose how much you are carrying. Do you ask or handle it alone?"
+  },
+  {
+    "id": "506",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone is unsure where they stand with you. Do you reassure them or expect your actions to be enough?"
+  },
+  {
+    "id": "507",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You are open with someone, but they rarely reassure you. Do you stay open or start protecting more?"
+  },
+  {
+    "id": "508",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You do not know why they moved the way they did. Do you offer patience or pull back from what they can reach?"
+  },
+  {
+    "id": "509",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A person wants more access than you planned to give. Do you open the door or decide the pace yourself?"
+  },
+  {
+    "id": "510",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You worked hard to become different. Do you share that process or guard what it cost you?"
+  },
+  {
+    "id": "511",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Something feels off early. Do you state the limit now or wait to see if it becomes a pattern?"
+  },
+  {
+    "id": "512",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone wants you to back them up, but you disagree with how they handled it. Do you give loyalty or give the truth?"
+  },
+  {
+    "id": "513",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone lets you down, but still expects the same access. Do you keep things open or adjust what they can reach?"
+  },
+  {
+    "id": "514",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You cross a line with someone and they expect an explanation. Do you give them one or close the door?"
+  },
+  {
+    "id": "515",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A person makes closeness feel natural, but the trust is still new. Do you give them more access or let consistency build first?"
+  },
+  {
+    "id": "516",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "When you share something personal is it for you or for them?"
+  },
+  {
+    "id": "517",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone asks for honesty, but the truth may hurt them. Do you give it straight or protect their feelings?"
+  },
+  {
+    "id": "518",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Your past would explain a lot, but it would also expose more than you planned. Do you share it or keep it private?"
+  },
+  {
+    "id": "519",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A connection asks for closeness, but closeness may cost freedom. Which one do you protect first?"
+  },
+  {
+    "id": "520",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A person is ready for more access than you are. Do you give it because they are ready or wait until you are?"
+  },
+  {
+    "id": "521",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You keep showing up for someone, but you are starting to notice how little comes back. Do you offer less or keep giving from habit?"
+  },
+  {
+    "id": "522",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone is inconsistent, and you still do not know where you stand. Which one makes you protect yourself more?"
+  },
+  {
+    "id": "523",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A request is not wrong, but it is more than you want to give. Do you refuse it or offer a smaller version?"
+  },
+  {
+    "id": "524",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone asks what is going on before you have words for it. Do you give them the unfinished version or hold it until it makes sense?"
+  },
+  {
+    "id": "525",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You are not okay, but explaining would open more than you want to give. Do you answer or deflect?"
+  },
+  {
+    "id": "526",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You know what you really mean. Do you say it plainly or protect the relationship from the impact?"
+  },
+  {
+    "id": "527",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone wants the benefit of the doubt after giving you mixed signals. Do you offer it or hold the line?"
+  },
+  {
+    "id": "528",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone wants to be included in a part of your life you usually keep separate. Do you let them in or keep that part private?"
+  },
+  {
+    "id": "529",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone hurts you without realizing it, and everyone else keeps moving. Do you name it or carry it privately?"
+  },
+  {
+    "id": "530",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You accidentally reveal more than you meant to during a casual conversation. Do you keep going or close the subject back down?"
+  },
+  {
+    "id": "531",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You see the part of the problem they are avoiding. Do you say it clearly or wait until they are ready to hear it?"
+  },
+  {
+    "id": "532",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A hard truth"
+  },
+  {
+    "id": "533",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone is working with the wrong version of what happened. Do you correct it or let them keep it?"
+  },
+  {
+    "id": "534",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You are asked to help with something you can do, but barely have room for. Do you give support or protect capacity?"
+  },
+  {
+    "id": "535",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A person wants your loyalty even when you disagree. Do you give it without terms or define the limit?"
+  },
+  {
+    "id": "536",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "What you have not said is starting to shape how you act. Do you give the thought words or keep it guarded?"
+  },
+  {
+    "id": "537",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone asks for more than you currently have. Do you admit the gap or try to give anyway?"
+  },
+  {
+    "id": "538",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Your actual reason is different from the one you gave. Do you correct it or let the easier answer stand?"
+  },
+  {
+    "id": "539",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "What happened affected you more than people know. Do you say what it did or keep functioning?"
+  },
+  {
+    "id": "540",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You were counting on something they did not know mattered. Do you tell them or protect the disappointment?"
+  },
+  {
+    "id": "541",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "People want your answer now, but you are not ready. Do you give one anyway or protect the right to not know yet?"
+  },
+  {
+    "id": "542",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A fear is influencing your choice, but naming it would make you vulnerable. Do you say it or protect it?"
+  },
+  {
+    "id": "543",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Your limit is clear to you, but not to them. Do you say it or make it visible through distance?"
+  },
+  {
+    "id": "544",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Your real feelings are different from what you have shown. Do you reveal them or keep the safer version?"
+  },
+  {
+    "id": "545",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Someone wants the full story, but the full story exposes other people too. Do you tell it or keep parts protected?"
+  },
+  {
+    "id": "546",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "A weakness shows up in a moment where you wanted to seem steady. Do you admit it or cover it?"
+  },
+  {
+    "id": "547",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You need support, but admitting it would change how independent you seem. Do you say it or keep adapting alone?"
+  },
+  {
+    "id": "548",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You are disappointed, but saying it may make them defensive. Do you tell them or protect the moment?"
+  },
+  {
+    "id": "549",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "You are confused, but admitting that may make you look unsure. Do you say it or act like you understand?"
+  },
+  {
+    "id": "550",
+    "deckId": "guard_give",
+    "type": "question",
+    "prompt": "Your anger has a point, but the delivery could decide whether people hear it. Do you express it fully or control how much comes out?"
+  },
+  {
+    "id": "601",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A family issue shows up at every gathering, but people act like it is normal. Do you name it or keep moving with the room?"
+  },
+  {
+    "id": "602",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You notice the bill was split unfairly. Do you say something at the table or pay your part and move on?"
+  },
+  {
+    "id": "603",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You are offered the leftover option after everyone else has chosen. Do you take it or say that does not work for you?"
+  },
+  {
+    "id": "604",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You can point out the issue now or let it become a bigger problem later. Which consequence do you accept?"
+  },
+  {
+    "id": "605",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A holiday tradition used to work for everyone, but now one person does all the labor. Do you keep honoring it or question the tradition?"
+  },
+  {
+    "id": "606",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You asked people not to show up late, but they keep treating it as flexible. Do you keep reminding them or change what happens when they are late?"
+  },
+  {
+    "id": "607",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A family rule is treated like respect, but it mostly protects control. Do you follow the rule or challenge the reason?"
+  },
+  {
+    "id": "608",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A friend group always works around one person’s mood. Do you keep adapting or name the pattern?"
+  },
+  {
+    "id": "609",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "One person keeps correcting the same mistake for everyone. Do you let them keep carrying it or push for the source to change?"
+  },
+  {
+    "id": "610",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone keeps pretending the event went smoothly because the guests did not notice the chaos. Do you protect the image or talk about what broke down?"
+  },
+  {
+    "id": "611",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A friend borrows something once, then starts treating it like shared property. Do you correct it now or let the habit form?"
+  },
+  {
+    "id": "612",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The instruction says one thing, but common sense says another. Do you follow the instruction or press for the purpose?"
+  },
+  {
+    "id": "613",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A scheduling system works for the person making it, but not for the people using it. Do you adapt or question the setup?"
+  },
+  {
+    "id": "614",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You challenged something before and got labeled difficult. Do you speak up again or choose your battles differently?"
+  },
+  {
+    "id": "615",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The group picks a restaurant where you can barely eat anything. Do you make it work or ask them to choose somewhere else?"
+  },
+  {
+    "id": "616",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone laughs at a joke that makes you uncomfortable. Do you blend in or let the room know it did not land for you?"
+  },
+  {
+    "id": "617",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You know how to avoid the bad part of a system, but other people cannot. Do you keep using the workaround or question the system?"
+  },
+  {
+    "id": "618",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Someone says the decision was fair because it applied to everyone, but the impact was not equal. Do you accept the logic or press the result?"
+  },
+  {
+    "id": "619",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A plan is messy but functioning. Do you leave it alone or risk breaking it to improve it?"
+  },
+  {
+    "id": "620",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A workplace habit gets defended because “that is how we have always done it.” Do you follow it or question its origin?"
+  },
+  {
+    "id": "621",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "One person brings up every concern right away. Another waits until the issue becomes unavoidable. Which approach makes more sense to you?"
+  },
+  {
+    "id": "622",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You notice the group forgot to invite someone who should be included. Do you say it now or wait to see if anyone else catches it?"
+  },
+  {
+    "id": "623",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone is ready to move on, but you still disagree. Do you swallow it or risk being the delay?"
+  },
+  {
+    "id": "624",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A friend group always lets the same person decide the plan because “they’re good at it.” Do you go along or ask if anyone else wants input?"
+  },
+  {
+    "id": "625",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You are the only one bothered by how someone was treated. Do you question your reaction or the room’s standard?"
+  },
+  {
+    "id": "626",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Someone tells you to follow the normal steps even though they create unnecessary work. Do you go through them or ask for a better route?"
+  },
+  {
+    "id": "627",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "They heard your concern and continued the same behavior. Do you repeat yourself or accept the answer their actions gave?"
+  },
+  {
+    "id": "628",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone agrees to split the bill evenly, but you ordered way less. Do you pay it or say something?"
+  },
+  {
+    "id": "629",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You see a safety issue before anyone else does. Do you stop the plan or wait until someone else confirms it?"
+  },
+  {
+    "id": "630",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "People volunteer you for something because they assume you will manage it well. Do you accept the role or challenge the assumption?"
+  },
+  {
+    "id": "631",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You pushed for change and got ignored. Do you escalate, redirect, or stop investing?"
+  },
+  {
+    "id": "632",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The group decided the issue is not serious, but it keeps affecting you. Do you drop it or bring it back?"
+  },
+  {
+    "id": "633",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Fixing the issue would inconvenience everyone, but leaving it alone keeps costing one person. Which cost matters more?"
+  },
+  {
+    "id": "634",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone agrees to a plan before enough information is available. Do you slow it down or let the group move?"
+  },
+  {
+    "id": "635",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You are told not to ruin the mood by bringing up the issue. Do you protect the mood or name what is wrong?"
+  },
+  {
+    "id": "636",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The rule bends when it benefits someone with more influence. Do you challenge it or move on?"
+  },
+  {
+    "id": "637",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You are asked to be the bigger person so everyone else can move on. Do you accept that role or reject it?"
+  },
+  {
+    "id": "638",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The person making the decision will not deal with the fallout. Do you accept their call or make the cost visible?"
+  },
+  {
+    "id": "639",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Fixing the issue would take away an advantage from someone close to you. Do you press for fairness or protect their benefit?"
+  },
+  {
+    "id": "640",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "You agree with the decision, but not the way it was made. Do you take the outcome or challenge the process?"
+  },
+  {
+    "id": "641",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The rule is minor to everyone else because you absorb the cost. Do you accept that or press for change?"
+  },
+  {
+    "id": "642",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Everyone agrees on where to eat, but you are the only one who cannot eat there. Do you go along or make the issue visible?"
+  },
+  {
+    "id": "643",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Someone’s comment feels off, but no one else reacts. Do you let it pass or question it?"
+  },
+  {
+    "id": "644",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A task keeps falling to you because no one officially assigned it. Do you keep doing it or name the expectation?"
+  },
+  {
+    "id": "645",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A bad setup is defended as normal because everyone is used to it. Do you accept “normal” or press for better?"
+  },
+  {
+    "id": "646",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The issue returns wearing a new outfit. Do you treat it as new or name what keeps repeating?"
+  },
+  {
+    "id": "647",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "A standard changes once the cost lands on someone else. Do you call out the shift or accept the new version?"
+  },
+  {
+    "id": "648",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The rule becomes strict the moment it reaches you. Do you accept it or ask why now?"
+  },
+  {
+    "id": "649",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "The change is possible, but inconvenient for the people who would have to make it. Do you work around it or press anyway?"
+  },
+  {
+    "id": "650",
+    "deckId": "press_accept",
+    "type": "question",
+    "prompt": "Nothing is officially broken, but the experience says otherwise. Do you move on or name what the technical answer missed?"
+  }
+]
