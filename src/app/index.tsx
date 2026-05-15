@@ -47,7 +47,7 @@ export default function IndexScreen() {
 
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <Text style={styles.brandSmall}>DEEP END</Text>
+          <Text style={styles.brandSmall}></Text>
 
           <Pressable
             onPress={() => setSettingsVisible(true)}
