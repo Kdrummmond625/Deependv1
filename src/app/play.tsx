@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
-import { AppButton } from "@/components/AppButton";
-import { AppScreen } from "@/components/AppScreen";
-import { HeaderGear } from "@/components/HeaderGear";
 import { SettingsModal } from "@/components/SettingsModal";
-import { SwipeableCard } from "@/components/SwipeableCard";
-import { colors } from "@/constants/colors";
-import { spacing } from "@/constants/spacing";
-import { typography } from "@/constants/typography";
+import { InkLink } from "@/components/paper/InkLink";
+import { PaperScreen } from "@/components/paper/PaperScreen";
+import { PlayingCard } from "@/components/paper/PlayingCard";
+import { RaisedButton } from "@/components/paper/RaisedButton";
+import {
+  paperColors,
+  paperFonts,
+  paperSpacing,
+  paperType,
+} from "@/constants/paperTheme";
 import {
   getCardById,
+  getCardsForDecks,
   getNextCard,
   shouldPassPhone,
 } from "@/features/game/cardEngine";
 import { useGameStore } from "@/features/game/gameStore";
+import { useFavoritesStore } from "@/features/favorites/favoritesStore";
+import {
+  getFavoritesIntroShown,
+  setFavoritesIntroShown,
+} from "@/features/favorites/favoritesStorage";
 import { useHapticTimer } from "@/hooks/useHapticTimer";
 import { formatDeckName } from "@/utils/formatDeckName";
 
@@ -29,10 +38,32 @@ export default function PlayScreen() {
   const skipCard = useGameStore((state) => state.skipCard);
   const goBackInHistory = useGameStore((state) => state.goBackInHistory);
 
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const hydrateFavorites = useFavoritesStore((state) => state.hydrateFavorites);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+
   const [settingsVisible, setSettingsVisible] = useState(false);
 
+  useEffect(() => {
+    void hydrateFavorites();
+  }, [hydrateFavorites]);
+
   const currentCard = getCardById(session.currentCardId);
-  const hasPreviousCard = session.historyIndex > 0;
+
+  const currentHistoryIndex = session.currentCardId
+    ? session.cardHistory.indexOf(session.currentCardId)
+    : -1;
+
+  const hasPreviousCard = currentHistoryIndex > 0;
+  const isEmptyState = session.isDeckComplete || !currentCard;
+
+  const activeCardCount = getCardsForDecks(session.activeDeckIds).length;
+  const displayedCardNumber =
+    currentHistoryIndex >= 0 ? currentHistoryIndex + 1 : undefined;
+
+  const isCurrentCardFavorited = currentCard
+    ? favorites.some((favorite) => favorite.cardId === currentCard.id)
+    : false;
 
   useHapticTimer({
     cardId: currentCard?.id ?? null,
@@ -40,19 +71,19 @@ export default function PlayScreen() {
     enabled: settings.hapticsEnabled,
   });
 
-  const fireSwipeHaptic = async () => {
+  const fireHaptic = () => {
     if (!settings.hapticsEnabled) return;
-    await Haptics.selectionAsync();
+    void Haptics.selectionAsync();
   };
 
-  const loadNextCard = () => {
-    const updatedSession = useGameStore.getState().session;
+  const loadNextCardFromLatestState = () => {
+    const latestSession = useGameStore.getState().session;
 
     const nextCard = getNextCard({
-      activeDeckIds: updatedSession.activeDeckIds,
-      currentCardId: updatedSession.currentCardId,
-      usedCardIds: updatedSession.usedCardIds,
-      skippedCardIds: updatedSession.skippedCardIds,
+      activeDeckIds: latestSession.activeDeckIds,
+      currentCardId: latestSession.currentCardId,
+      usedCardIds: latestSession.usedCardIds,
+      skippedCardIds: latestSession.skippedCardIds,
     });
 
     if (!nextCard) {
@@ -64,19 +95,22 @@ export default function PlayScreen() {
     setCurrentCard(nextCard.id);
   };
 
-  const handleNext = async () => {
-    if (!currentCard || session.isDeckComplete) return;
+  const advanceToNextCard = () => {
+    const latestSession = useGameStore.getState().session;
+    const latestCard = getCardById(latestSession.currentCardId);
 
-    await fireSwipeHaptic();
+    if (!latestCard || latestSession.isDeckComplete) return;
 
-    markCardDiscussed(currentCard.id, currentCard.deckId);
+    fireHaptic();
 
-    const updatedSession = useGameStore.getState().session;
+    markCardDiscussed(latestCard.id, latestCard.deckId);
+
+    const sessionAfterMarking = useGameStore.getState().session;
 
     const shouldRouteToPassScreen =
-      !updatedSession.isPlayerlessMode &&
+      !sessionAfterMarking.isPlayerlessMode &&
       shouldPassPhone(
-        updatedSession.cardsSinceLastPass,
+        sessionAfterMarking.cardsSinceLastPass,
         settings.passFrequency
       );
 
@@ -86,21 +120,51 @@ export default function PlayScreen() {
       return;
     }
 
-    loadNextCard();
+    loadNextCardFromLatestState();
   };
 
-  const handlePrevious = async () => {
-    if (!hasPreviousCard) return;
+  const goToPreviousCard = () => {
+    const latestSession = useGameStore.getState().session;
 
-    await fireSwipeHaptic();
+    if (latestSession.historyIndex <= 0 && currentHistoryIndex <= 0) return;
+
+    fireHaptic();
     goBackInHistory();
   };
 
-  const handleSkip = () => {
-    if (!currentCard || session.isDeckComplete) return;
+  const skipCurrentCard = () => {
+    const latestSession = useGameStore.getState().session;
+    const latestCard = getCardById(latestSession.currentCardId);
 
-    skipCard(currentCard.id);
-    loadNextCard();
+    if (!latestCard || latestSession.isDeckComplete) return;
+
+    fireHaptic();
+
+    skipCard(latestCard.id);
+    loadNextCardFromLatestState();
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!currentCard) return;
+
+    fireHaptic();
+
+    const wasAdded = await toggleFavorite(currentCard.id);
+
+    if (!wasAdded) return;
+
+    const hasSeenIntro = await getFavoritesIntroShown();
+
+    if (hasSeenIntro) return;
+
+    await setFavoritesIntroShown();
+
+    Alert.alert(
+      "Saved to Favorites",
+      "You can find your favorite cards from the heart on the Choose a Deck screen.",
+      [{ text: "Got it" }],
+      { cancelable: true }
+    );
   };
 
   const handleEndGame = () => {
@@ -122,31 +186,39 @@ export default function PlayScreen() {
     );
   };
 
-  const isEmptyState = session.isDeckComplete || !currentCard;
-
   return (
-    <AppScreen>
+    <PaperScreen>
       <View style={styles.container}>
         <View style={styles.topRow}>
           <Pressable
-            onPress={handlePrevious}
+            onPress={goToPreviousCard}
             hitSlop={12}
             disabled={!hasPreviousCard}
             accessibilityRole="button"
             accessibilityLabel="Previous card"
+            accessibilityState={{ disabled: !hasPreviousCard }}
             style={[styles.topAction, !hasPreviousCard && styles.disabled]}
           >
-            <Text style={styles.topActionText}>Back</Text>
+            <Text style={styles.topActionText}>← Back</Text>
           </Pressable>
 
-          <HeaderGear onPress={() => setSettingsVisible(true)} />
+          <Pressable
+            onPress={() => setSettingsVisible(true)}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+            style={styles.settingsButton}
+          >
+            <Text style={styles.settingsText}>⚙︎</Text>
+          </Pressable>
 
           <Pressable
-            onPress={handleSkip}
+            onPress={skipCurrentCard}
             hitSlop={12}
             disabled={isEmptyState}
             accessibilityRole="button"
             accessibilityLabel="Skip card"
+            accessibilityState={{ disabled: isEmptyState }}
             style={[styles.topAction, isEmptyState && styles.disabled]}
           >
             <Text style={styles.topActionText}>Skip</Text>
@@ -154,57 +226,55 @@ export default function PlayScreen() {
         </View>
 
         <View style={styles.centerArea}>
-          <Text style={styles.deckLabel}>
-            {currentCard
-              ? formatDeckName(currentCard.deckId).toUpperCase()
-              : "DECK COMPLETE"}
-          </Text>
-
           {isEmptyState ? (
-            <View style={styles.cardPanel}>
-              <Text style={styles.prompt}>You reached the end of this pull.</Text>
-              <Text style={styles.emptyBody}>
-                Choose another deck or end the session here.
-              </Text>
+            <View style={styles.emptyCardWrap}>
+              <View style={styles.emptyShadow} />
+              <View style={styles.emptyCard}>
+                <Text style={styles.emptyKicker}>DECK COMPLETE</Text>
+                <Text style={styles.emptyTitle}>
+                  You reached the end of this pull.
+                </Text>
+                <Text style={styles.emptyBody}>
+                  Choose another deck or end the session here.
+                </Text>
+              </View>
             </View>
           ) : (
-            <SwipeableCard
-              onSwipeRight={handleNext}
-              onSwipeLeft={handlePrevious}
-            >
-              <View style={styles.cardPanel}>
-                <Text style={styles.prompt}>{currentCard.prompt}</Text>
-              </View>
-            </SwipeableCard>
+            <PlayingCard
+              deckLabel={formatDeckName(currentCard.deckId).toUpperCase()}
+              prompt={currentCard.prompt}
+              cardNumber={displayedCardNumber}
+              totalCards={activeCardCount}
+              isFavorited={isCurrentCardFavorited}
+              onToggleFavorite={handleToggleFavorite}
+            />
           )}
         </View>
 
-        <View style={styles.bottomActions}>
+        <View style={styles.actions}>
           {isEmptyState ? (
-            <AppButton
-              title="CHOOSE ANOTHER DECK"
+            <RaisedButton
+              title="CHOOSE ANOTHER DECK →"
+              variant="gold"
               onPress={() => router.push("/decks")}
             />
           ) : (
-            <AppButton title="NEXT CARD" onPress={handleNext} />
+            <RaisedButton title="NEXT CARD →" onPress={advanceToNextCard} />
           )}
 
-          <View style={styles.secondaryRow}>
+          <View style={styles.linkRow}>
             {!isEmptyState && (
-              <AppButton
-                title="CHANGE DECK"
-                variant="secondary"
-                onPress={() => router.push("/decks")}
-                style={styles.secondaryButton}
-              />
+              <>
+                <Text style={styles.smallText}>or</Text>
+                <InkLink
+                  title="change deck"
+                  onPress={() => router.push("/decks")}
+                />
+                <Text style={styles.dot}>·</Text>
+              </>
             )}
 
-            <AppButton
-              title="END GAME"
-              variant="secondary"
-              onPress={handleEndGame}
-              style={styles.secondaryButton}
-            />
+            <InkLink title="end game" onPress={handleEndGame} />
           </View>
         </View>
 
@@ -213,13 +283,14 @@ export default function PlayScreen() {
           onClose={() => setSettingsVisible(false)}
         />
       </View>
-    </AppScreen>
+    </PaperScreen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-between",
   },
   topRow: {
     height: 44,
@@ -228,7 +299,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   topAction: {
-    minWidth: 48,
+    minWidth: 68,
     height: 36,
     alignItems: "center",
     justifyContent: "center",
@@ -237,52 +308,86 @@ const styles = StyleSheet.create({
     opacity: 0.35,
   },
   topActionText: {
-    color: colors.mutedCream,
-    fontSize: 14,
+    color: paperColors.ink,
+    fontSize: 13,
     fontWeight: "600",
+  },
+  settingsButton: {
+    width: 36,
+    height: 36,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  settingsText: {
+    color: paperColors.ink,
+    fontSize: 22,
+    lineHeight: 24,
   },
   centerArea: {
     flex: 1,
     justifyContent: "center",
-    gap: spacing.lg,
   },
-  deckLabel: {
-    color: colors.gold,
-    fontSize: 13,
-    letterSpacing: 2,
-    fontWeight: "700",
-    textAlign: "center",
+  emptyCardWrap: {
+    position: "relative",
+    marginBottom: paperSpacing.xl,
   },
-  cardPanel: {
-    minHeight: 320,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 8,
-    padding: spacing.xl,
+  emptyShadow: {
+    position: "absolute",
+    top: 7,
+    left: 7,
+    right: -7,
+    bottom: -7,
+    backgroundColor: paperColors.ink,
+    borderRadius: 18,
+  },
+  emptyCard: {
+    minHeight: 292,
+    backgroundColor: paperColors.paperLight,
+    borderWidth: 3,
+    borderColor: paperColors.ink,
+    borderRadius: 18,
+    padding: paperSpacing.xl,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.md,
-    backgroundColor: "rgba(255,255,255,0.03)",
+    gap: paperSpacing.md,
   },
-  prompt: {
-    ...typography.heading,
-    color: colors.cream,
+  emptyKicker: {
+    ...paperType.label,
+    color: paperColors.terracotta,
+  },
+  emptyTitle: {
+    ...paperType.prompt,
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
     textAlign: "center",
   },
   emptyBody: {
-    ...typography.body,
-    color: colors.mutedCream,
+    ...paperType.body,
+    color: paperColors.ink,
+    opacity: 0.68,
     textAlign: "center",
   },
-  bottomActions: {
-    gap: spacing.md,
-    paddingBottom: spacing.lg,
+  actions: {
+    gap: paperSpacing.lg,
+    paddingBottom: paperSpacing.xs,
   },
-  secondaryRow: {
+  linkRow: {
+    minHeight: 28,
     flexDirection: "row",
-    gap: spacing.md,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: paperSpacing.sm,
+    flexWrap: "wrap",
   },
-  secondaryButton: {
-    flex: 1,
+  smallText: {
+    color: paperColors.ink,
+    opacity: 0.62,
+    fontSize: 13,
+  },
+  dot: {
+    color: paperColors.ink,
+    opacity: 0.52,
+    fontSize: 16,
+    marginHorizontal: -2,
   },
 });

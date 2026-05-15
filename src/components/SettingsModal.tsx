@@ -1,10 +1,14 @@
-import { Alert, Modal, Pressable, StyleSheet, Switch, Text, View } from "react-native";
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-import { AppButton } from "@/components/AppButton";
-import { SettingStepper } from "@/components/SettingStepper";
-import { colors } from "@/constants/colors";
-import { spacing } from "@/constants/spacing";
-import { typography } from "@/constants/typography";
+import { PaperStepper } from "@/components/paper/PaperStepper";
+import { RaisedButton } from "@/components/paper/RaisedButton";
+import {
+  paperColors,
+  paperFonts,
+  paperRadii,
+  paperSpacing,
+  paperType,
+} from "@/constants/paperTheme";
 import { useGameStore } from "@/features/game/gameStore";
 
 type SettingsModalProps = {
@@ -48,6 +52,12 @@ export function SettingsModal({
     );
   };
 
+  const toggleHaptics = () => {
+    updateSettings({
+      hapticsEnabled: !settings.hapticsEnabled,
+    });
+  };
+
   return (
     <Modal
       visible={visible}
@@ -63,83 +73,98 @@ export function SettingsModal({
           accessibilityLabel="Close settings"
         />
 
-        <View style={styles.panel}>
-          <View style={styles.header}>
-            <View>
-              <Text style={styles.kicker}>SETTINGS</Text>
-              <Text style={styles.title}>Keep the game moving</Text>
+        <View style={styles.sheetWrap}>
+          <View style={styles.sheetShadow} />
+
+          <View style={styles.sheet}>
+            <View style={styles.handle} />
+
+            <View style={styles.header}>
+              <View style={styles.headerCopy}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>SETTINGS</Text>
+                </View>
+
+                <Text style={styles.title}>Keep the game moving.</Text>
+              </View>
+
+              <Pressable
+                onPress={onClose}
+                hitSlop={12}
+                accessibilityRole="button"
+                accessibilityLabel="Close settings"
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeText}>×</Text>
+              </Pressable>
             </View>
 
-            <Pressable
-              onPress={onClose}
-              hitSlop={12}
-              accessibilityRole="button"
-              accessibilityLabel="Close settings"
-              style={styles.closeButton}
-            >
-              <Text style={styles.closeText}>×</Text>
-            </Pressable>
-          </View>
+            <View style={styles.stepperRow}>
+              <PaperStepper
+                label="PASS EVERY"
+                value={settings.passFrequency}
+                min={1}
+                max={5}
+                accentColor={paperColors.gold}
+                onChange={(value) => updateSettings({ passFrequency: value })}
+              />
 
-          <View style={styles.section}>
-            <SettingStepper
-              label="Pass Every"
-              value={settings.passFrequency}
-              min={1}
-              max={5}
-              onChange={(value) => updateSettings({ passFrequency: value })}
-            />
+              <PaperStepper
+                label="TIMER (MIN)"
+                value={settings.hapticTimerMinutes}
+                min={1}
+                max={15}
+                accentColor={paperColors.terracotta}
+                onChange={(value) =>
+                  updateSettings({ hapticTimerMinutes: value })
+                }
+              />
+            </View>
 
-            <SettingStepper
-              label="Timer"
-              value={settings.hapticTimerMinutes}
-              min={1}
-              max={15}
-              onChange={(value) =>
-                updateSettings({ hapticTimerMinutes: value })
-              }
-            />
-          </View>
+            <View style={styles.toggleRow}>
+              <View style={styles.toggleAccent} />
 
-          <View style={styles.switchSection}>
-            <View style={styles.switchRow}>
-              <View style={styles.switchCopy}>
-                <Text style={styles.switchLabel}>Haptics</Text>
-                <Text style={styles.switchDescription}>
+              <View style={styles.toggleCopy}>
+                <Text style={styles.toggleTitle}>Haptics</Text>
+                <Text style={styles.toggleBody}>
                   Interaction feedback and timer nudges.
                 </Text>
               </View>
 
-              <Switch
-                value={settings.hapticsEnabled}
-                onValueChange={(value) =>
-                  updateSettings({ hapticsEnabled: value })
-                }
-                thumbColor={colors.cream}
-                trackColor={{
-                  false: "rgba(244,235,221,0.18)",
-                  true: colors.terracotta,
-                }}
-              />
+              <Pressable
+                onPress={toggleHaptics}
+                accessibilityRole="switch"
+                accessibilityState={{ checked: settings.hapticsEnabled }}
+                accessibilityLabel="Toggle haptics"
+                style={[
+                  styles.switchTrack,
+                  !settings.hapticsEnabled && styles.switchOff,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.switchThumb,
+                    settings.hapticsEnabled && styles.switchThumbOn,
+                  ]}
+                />
+              </Pressable>
             </View>
-          </View>
 
-          <View style={styles.actions}>
-            <AppButton
-              title="REPLAY HOW TO PLAY"
-              variant="secondary"
-              onPress={handleReplayTutorial}
-            />
-
-            {showEndGame && (
-              <AppButton
-                title="END GAME"
-                variant="danger"
-                onPress={handleEndGame}
+            <View style={styles.actions}>
+              <RaisedButton
+                title="REPLAY TUTORIAL"
+                variant="gold"
+                onPress={handleReplayTutorial}
               />
-            )}
 
-            <AppButton title="CLOSE" onPress={onClose} />
+              {showEndGame && (
+                <RaisedButton
+                  title="END GAME"
+                  variant="danger"
+                  onPress={handleEndGame}
+                />
+              )}
+            </View>
           </View>
         </View>
       </View>
@@ -150,80 +175,160 @@ export function SettingsModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
+    backgroundColor: "rgba(7, 21, 18, 0.55)",
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.45)",
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },
-  panel: {
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    borderWidth: 1,
-    borderColor: colors.line,
-    backgroundColor: colors.forest,
-    padding: spacing.lg,
-    gap: spacing.lg,
+  sheetWrap: {
+    position: "relative",
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  sheetShadow: {
+    position: "absolute",
+    top: 7,
+    left: 7,
+    right: -7,
+    bottom: -7,
+    backgroundColor: paperColors.ink,
+    borderRadius: paperRadii.xl,
+  },
+  sheet: {
+    backgroundColor: paperColors.paperLight,
+    borderWidth: 3,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.xl,
+    paddingHorizontal: paperSpacing.lg,
+    paddingTop: paperSpacing.md,
+    paddingBottom: paperSpacing.lg,
+  },
+  handle: {
+    width: 42,
+    height: 5,
+    borderRadius: paperRadii.pill,
+    backgroundColor: paperColors.ink,
+    opacity: 0.28,
+    alignSelf: "center",
+    marginBottom: paperSpacing.md,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: spacing.md,
+    alignItems: "flex-start",
+    marginBottom: paperSpacing.lg,
+    gap: paperSpacing.md,
   },
-  kicker: {
-    color: colors.gold,
-    fontSize: 12,
-    fontWeight: "700",
+  headerCopy: {
+    flex: 1,
+  },
+  badge: {
+    alignSelf: "flex-start",
+    backgroundColor: paperColors.gold,
+    borderWidth: 1.8,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginBottom: paperSpacing.sm,
+  },
+  badgeText: {
+    ...paperType.label,
+    color: paperColors.ink,
     letterSpacing: 2,
   },
   title: {
-    ...typography.heading,
-    color: colors.cream,
-    marginTop: spacing.xs,
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 23,
+    lineHeight: 27,
+    fontWeight: "700",
   },
   closeButton: {
-    width: 36,
-    height: 36,
+    width: 34,
+    height: 34,
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: 17,
+    backgroundColor: paperColors.paper,
     alignItems: "center",
     justifyContent: "center",
   },
   closeText: {
-    color: colors.mutedCream,
-    fontSize: 28,
-    lineHeight: 28,
+    color: paperColors.ink,
+    fontSize: 24,
+    lineHeight: 25,
+    fontWeight: "700",
   },
-  section: {
+  stepperRow: {
     flexDirection: "row",
-    gap: spacing.lg,
+    gap: paperSpacing.sm,
+    marginBottom: paperSpacing.lg,
   },
-  switchSection: {
-    gap: spacing.md,
-  },
-  switchRow: {
-    minHeight: 56,
+  toggleRow: {
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.md,
+    backgroundColor: paperColors.paper,
+    paddingVertical: paperSpacing.md,
+    paddingHorizontal: paperSpacing.md,
+    marginBottom: paperSpacing.lg,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.line,
-    paddingBottom: spacing.md,
+    gap: paperSpacing.md,
+    overflow: "hidden",
   },
-  switchCopy: {
+  toggleAccent: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 7,
+    backgroundColor: paperColors.moss,
+  },
+  toggleCopy: {
     flex: 1,
-    gap: spacing.xs,
+    paddingLeft: paperSpacing.sm,
   },
-  switchLabel: {
-    color: colors.cream,
-    fontSize: 16,
-    fontWeight: "700",
+  toggleTitle: {
+    color: paperColors.ink,
+    fontSize: 15,
+    fontWeight: "800",
+    marginBottom: 2,
   },
-  switchDescription: {
-    color: colors.mutedCream,
-    fontSize: 12,
-    lineHeight: 16,
+  toggleBody: {
+    color: paperColors.ink,
+    opacity: 0.62,
+    fontSize: 11,
+    lineHeight: 15,
+  },
+  switchTrack: {
+    width: 48,
+    height: 28,
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.pill,
+    backgroundColor: paperColors.terracotta,
+    padding: 2,
+    justifyContent: "center",
+  },
+  switchOff: {
+    backgroundColor: paperColors.paperMuted,
+  },
+  switchThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: paperColors.ink,
+    backgroundColor: paperColors.paper,
+  },
+  switchThumbOn: {
+    alignSelf: "flex-end",
   },
   actions: {
-    gap: spacing.md,
+    gap: paperSpacing.md,
   },
 });

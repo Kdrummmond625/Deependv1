@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-import { AppButton } from "@/components/AppButton";
-import { AppScreen } from "@/components/AppScreen";
-import { AppTextInput } from "@/components/AppTextInput";
-import { HeaderGear } from "@/components/HeaderGear";
-import { SettingStepper } from "@/components/SettingStepper";
 import { SettingsModal } from "@/components/SettingsModal";
-import { colors } from "@/constants/colors";
-import { spacing } from "@/constants/spacing";
-import { typography } from "@/constants/typography";
+import { InkLink } from "@/components/paper/InkLink";
+import { PaperScreen } from "@/components/paper/PaperScreen";
+import { PaperStepper } from "@/components/paper/PaperStepper";
+import { PlayerNameRow } from "@/components/paper/PlayerNameRow";
+import { RaisedButton } from "@/components/paper/RaisedButton";
+import {
+  paperColors,
+  paperFonts,
+  paperSpacing,
+} from "@/constants/paperTheme";
 import { useGameStore } from "@/features/game/gameStore";
 
 const MAX_PLAYERS = 12;
@@ -58,67 +60,69 @@ export default function SetupScreen() {
   };
 
   return (
-    <AppScreen>
+    <PaperScreen style={styles.screenContent}>
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <View />
-          <HeaderGear onPress={() => setSettingsVisible(true)} />
+          <View style={styles.topSpacer} />
+
+          <Pressable
+            onPress={() => setSettingsVisible(true)}
+            hitSlop={14}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+            style={styles.settingsButton}
+          >
+            <Text style={styles.settingsText}>⚙︎</Text>
+          </Pressable>
         </View>
 
         <View style={styles.header}>
-          <Text style={styles.title}>Who&apos;s Playing</Text>
+          <Text style={styles.title}>Who's playing?</Text>
           <Text style={styles.subtitle}>customize your experience</Text>
         </View>
 
         <View style={styles.playerList}>
           {players.map((player, index) => (
-            <View key={index} style={styles.playerRow}>
-              <Text style={styles.number}>{index + 1}</Text>
-
-              <AppTextInput
-                value={player}
-                onChangeText={(value) => updatePlayer(index, value)}
-                placeholder="NAME"
-                style={styles.playerInput}
-              />
-
-              <Pressable
-                onPress={() => removePlayer(index)}
-                hitSlop={10}
-                accessibilityRole="button"
-                accessibilityLabel={`Remove player ${index + 1}`}
-                style={styles.removeInline}
-              >
-                <Text style={styles.removeInlineText}>×</Text>
-              </Pressable>
-            </View>
+            <PlayerNameRow
+              key={index}
+              index={index}
+              value={player}
+              onChangeText={(value) => updatePlayer(index, value)}
+              onRemove={() => removePlayer(index)}
+            />
           ))}
 
           <Pressable
             onPress={addPlayer}
-            style={styles.addRow}
+            disabled={players.length >= MAX_PLAYERS}
             accessibilityRole="button"
             accessibilityLabel="Add another player"
+            accessibilityState={{ disabled: players.length >= MAX_PLAYERS }}
+            style={[
+              styles.addRow,
+              players.length >= MAX_PLAYERS && styles.disabled,
+            ]}
           >
             <View style={styles.addCircle}>
-              <Text style={styles.addCircleText}>+</Text>
+              <Text style={styles.addPlus}>+</Text>
             </View>
+
             <Text style={styles.addText}>Add another player</Text>
-            <Text style={styles.countText}>{players.length}/8</Text>
+            <Text style={styles.countText}>{players.length}/{MAX_PLAYERS}</Text>
           </Pressable>
         </View>
 
-        <View style={styles.settingsRow}>
-          <SettingStepper
-            label="Pass Frequency (Cards)"
+        <View style={styles.stepperRow}>
+          <PaperStepper
+            label="PASS EVERY"
             value={settings.passFrequency}
             min={1}
             max={5}
             onChange={(value) => updateSettings({ passFrequency: value })}
           />
 
-          <SettingStepper
-            label="Haptic Timer (Mins)"
+          <PaperStepper
+            label="TIMER (MIN)"
             value={settings.hapticTimerMinutes}
             min={1}
             max={15}
@@ -126,11 +130,14 @@ export default function SetupScreen() {
           />
         </View>
 
-        <View style={styles.bottomActions}>
-          <AppButton title="LET’S GO" onPress={handleStart} />
-          <Text style={styles.skipJustCards} onPress={handleSkipNames}>
-            SKIP - Just the cards
-          </Text>
+        <View style={styles.actions}>
+          <RaisedButton title="LET'S GO →" onPress={handleStart} />
+
+          <InkLink
+            title="SKIP — just the cards"
+            onPress={handleSkipNames}
+            accessibilityLabel="Skip player names and play with just the cards"
+          />
         </View>
 
         <SettingsModal
@@ -139,107 +146,108 @@ export default function SetupScreen() {
           showEndGame={false}
         />
       </View>
-    </AppScreen>
+    </PaperScreen>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContent: {
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 18,
+  },
   container: {
     flex: 1,
   },
   topRow: {
+    height: 42,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
-  header: {
-    alignItems: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.lg,
-    gap: spacing.xs,
-  },
-  title: {
-    ...typography.heading,
-    color: colors.cream,
-    textAlign: "center",
-  },
-  subtitle: {
-    color: colors.mutedCream,
-    fontSize: 12,
-    textAlign: "center",
-  },
-  playerList: {
-    gap: spacing.sm,
-    marginBottom: spacing.lg,
-  },
-  playerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  number: {
-    width: 18,
-    color: colors.mutedCream,
-    fontSize: 12,
-    textAlign: "center",
-  },
-  playerInput: {
+  topSpacer: {
     flex: 1,
-    minHeight: 36,
-    fontSize: 12,
   },
-  removeInline: {
-    width: 24,
+  settingsButton: {
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
   },
-  removeInlineText: {
-    color: colors.mutedCream,
-    fontSize: 22,
-    lineHeight: 22,
+  settingsText: {
+    color: paperColors.ink,
+    fontSize: 28,
+    lineHeight: 30,
+  },
+  header: {
+    alignItems: "center",
+    marginTop: 18,
+    marginBottom: 24,
+  },
+  title: {
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 33,
+    lineHeight: 37,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  subtitle: {
+    color: paperColors.ink,
+    opacity: 0.62,
+    fontSize: 12,
+    fontStyle: "italic",
+    marginTop: 4,
+  },
+  playerList: {
+    gap: 11,
   },
   addRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.sm,
-    paddingVertical: spacing.sm,
+    gap: paperSpacing.sm,
+    paddingVertical: 8,
   },
   addCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.line,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderColor: paperColors.ink,
     alignItems: "center",
     justifyContent: "center",
   },
-  addCircleText: {
-    color: colors.cream,
-    fontSize: 14,
+  addPlus: {
+    color: paperColors.ink,
+    fontSize: 20,
+    lineHeight: 22,
     fontWeight: "700",
   },
   addText: {
-    color: colors.mutedCream,
+    color: paperColors.ink,
+    opacity: 0.75,
     fontSize: 13,
+    fontWeight: "600",
     flex: 1,
   },
   countText: {
-    color: colors.mutedCream,
+    color: paperColors.ink,
+    opacity: 0.55,
+    fontFamily: paperFonts.serif,
     fontSize: 12,
   },
-  settingsRow: {
+  stepperRow: {
     flexDirection: "row",
-    gap: spacing.md,
+    gap: paperSpacing.sm,
     marginTop: "auto",
-    marginBottom: spacing.lg,
+    marginBottom: 18,
   },
-  bottomActions: {
-    gap: spacing.md,
-    paddingBottom: spacing.lg,
+  actions: {
+    gap: 14,
+    paddingBottom: 4,
   },
-  skipJustCards: {
-    color: colors.mutedCream,
-    fontSize: 12,
-    textAlign: "center",
+  disabled: {
+    opacity: 0.45,
   },
 });

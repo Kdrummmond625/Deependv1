@@ -9,6 +9,11 @@ export type GameSettings = {
   hapticsEnabled: boolean;
 };
 
+export type SkippedCardRecord = {
+  cardId: string;
+  skippedByPlayerName: string | null;
+};
+
 export type GameSession = {
   players: string[];
   isPlayerlessMode: boolean;
@@ -24,6 +29,7 @@ export type GameSession = {
 
   usedCardIds: string[];
   skippedCardIds: string[];
+  skippedCards: SkippedCardRecord[];
 
   cardsDiscussed: number;
   cardsSinceLastPass: number;

@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-import { AppButton } from "@/components/AppButton";
-import { AppScreen } from "@/components/AppScreen";
-import { HeaderGear } from "@/components/HeaderGear";
 import { SettingsModal } from "@/components/SettingsModal";
-import { colors } from "@/constants/colors";
-import { spacing } from "@/constants/spacing";
-import { typography } from "@/constants/typography";
+import { DoodleLayer } from "@/components/paper/DoodleLayer";
+import { InkLink } from "@/components/paper/InkLink";
+import { PaperScreen } from "@/components/paper/PaperScreen";
+import { RaisedButton } from "@/components/paper/RaisedButton";
+import { StackedLogoCard } from "@/components/paper/StackedLogoCard";
+import {
+  paperColors,
+  paperFonts,
+  paperSpacing,
+  paperType,
+} from "@/constants/paperTheme";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 export default function IndexScreen() {
@@ -24,11 +29,11 @@ export default function IndexScreen() {
 
   if (isLoading) {
     return (
-      <AppScreen>
+      <PaperScreen>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator color={colors.gold} />
+          <ActivityIndicator color={paperColors.terracotta} />
         </View>
-      </AppScreen>
+      </PaperScreen>
     );
   }
 
@@ -37,38 +42,58 @@ export default function IndexScreen() {
   }
 
   return (
-    <AppScreen>
+    <PaperScreen>
+      <DoodleLayer />
+
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <View />
-          <HeaderGear onPress={() => setSettingsVisible(true)} />
+          <Text style={styles.brandSmall}>DEEP END</Text>
+
+          <Pressable
+            onPress={() => setSettingsVisible(true)}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+            style={styles.settingsButton}
+          >
+            <Text style={styles.settingsText}>⚙︎</Text>
+          </Pressable>
         </View>
 
         <View style={styles.centerContent}>
-          <Text style={styles.logo}>DEEP END</Text>
+          <StackedLogoCard />
 
-          <Text style={styles.body}>
-            Everyday situations.{"\n"}Choices you have to say out loud.
-          </Text>
+          <View style={styles.copyBlock}>
+            <Text style={styles.headline}>
+              Everyday situations.{"\n"}Choices you have to say out loud.
+            </Text>
+
+            <Text style={styles.subcopy}>
+              Pull a card. Read it out loud. Let the room answer.
+            </Text>
+          </View>
         </View>
 
         <View style={styles.actions}>
-          <AppButton title="START GAME" onPress={() => router.push("/setup")} />
+          <RaisedButton
+            title="START GAME →"
+            onPress={() => router.push("/setup")}
+            accessibilityLabel="Start game"
+          />
 
-          <AppButton
-            title="HOW TO PLAY"
-            variant="secondary"
+          <InkLink
+            title="How to play"
             onPress={() => router.push("/onboarding")}
           />
         </View>
-
-        <SettingsModal
-          visible={settingsVisible}
-          onClose={() => setSettingsVisible(false)}
-          showEndGame={false}
-        />
       </View>
-    </AppScreen>
+
+      <SettingsModal
+        visible={settingsVisible}
+        onClose={() => setSettingsVisible(false)}
+        showEndGame={false}
+      />
+    </PaperScreen>
   );
 }
 
@@ -85,28 +110,53 @@ const styles = StyleSheet.create({
   topRow: {
     height: 44,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  brandSmall: {
+    ...paperType.brandSmall,
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+  },
+  settingsButton: {
+    width: 36,
+    height: 36,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  settingsText: {
+    color: paperColors.ink,
+    fontSize: 23,
+    lineHeight: 24,
   },
   centerContent: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.lg,
+    gap: paperSpacing.xxl,
   },
-  logo: {
-    ...typography.title,
-    color: colors.cream,
-    textAlign: "center",
-    letterSpacing: 2,
+  copyBlock: {
+    alignItems: "center",
+    paddingHorizontal: paperSpacing.sm,
+    gap: paperSpacing.sm,
   },
-  body: {
-    ...typography.body,
-    color: colors.mutedCream,
+  headline: {
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 21,
+    lineHeight: 29,
     textAlign: "center",
+    fontWeight: "500",
+  },
+  subcopy: {
+    ...paperType.body,
+    color: paperColors.ink,
+    opacity: 0.64,
+    textAlign: "center",
+    maxWidth: 260,
   },
   actions: {
-    gap: spacing.md,
-    paddingBottom: spacing.lg,
+    gap: paperSpacing.lg,
+    paddingBottom: paperSpacing.xs,
   },
 });

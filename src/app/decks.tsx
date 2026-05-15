@@ -1,55 +1,106 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-import { AppScreen } from "@/components/AppScreen";
-import { HeaderGear } from "@/components/HeaderGear";
 import { SettingsModal } from "@/components/SettingsModal";
-import { colors } from "@/constants/colors";
-import { spacing } from "@/constants/spacing";
+import { DeckMiniCard } from "@/components/paper/DeckMiniCard";
+import { PaperScreen } from "@/components/paper/PaperScreen";
+import { RaisedButton } from "@/components/paper/RaisedButton";
+import {
+  paperColors,
+  paperFonts,
+  paperSpacing,
+} from "@/constants/paperTheme";
 import { decks } from "@/data/decks";
+import {
+  deckHasCards,
+  getCardCountForDeck,
+  getDeckIdsWithCards,
+} from "@/features/game/cardStats";
 import { startCardFlow } from "@/features/game/startCardFlow";
 import { useGameStore } from "@/features/game/gameStore";
-import { getUnlockedDeckIds } from "@/features/purchases/purchaseTypes";
+import { useFavoritesStore } from "@/features/favorites/favoritesStore";
 import { DeckId } from "@/types/deck";
 
-const hasFullAccess = true;
+const TEST_FULL_ACCESS = true;
 
-const unlockedDeckIds = getUnlockedDeckIds(hasFullAccess);
+const unlockedDeckIds = TEST_FULL_ACCESS
+  ? (decks.map((deck) => deck.id) as DeckId[])
+  : (decks.filter((deck) => deck.isFree).map((deck) => deck.id) as DeckId[]);
 
-const availableDeckIds = decks
-  .filter((deck) => unlockedDeckIds.includes(deck.id))
-  .map((deck) => deck.id) as DeckId[];
+const availableDeckIds = getDeckIdsWithCards(
+  decks
+    .filter((deck) => unlockedDeckIds.includes(deck.id) && !deck.isLocked)
+    .map((deck) => deck.id) as DeckId[]
+);
+
+const deckAccentMap: Record<DeckId, string> = {
+  ask_assume: paperColors.terracotta,
+  push_pull: paperColors.terracotta,
+  guard_give: paperColors.gold,
+  press_accept: paperColors.ink,
+  past_present: paperColors.gold,
+  keep_release: paperColors.ink,
+};
+
+const deckRotations: Array<"-1deg" | "1deg" | "0deg"> = [
+  "-1deg",
+  "1deg",
+  "1deg",
+  "-1deg",
+  "-1deg",
+  "1deg",
+];
 
 export default function DecksScreen() {
   const session = useGameStore((state) => state.session);
   const selectSingleDeck = useGameStore((state) => state.selectSingleDeck);
   const selectRandomize = useGameStore((state) => state.selectRandomize);
 
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const hydrateFavorites = useFavoritesStore((state) => state.hydrateFavorites);
+
   const [settingsVisible, setSettingsVisible] = useState(false);
+
+  useEffect(() => {
+    void hydrateFavorites();
+  }, [hydrateFavorites]);
+
+  const handleBack = () => {
+    router.replace(session.isPlayerlessMode ? "/setup" : "/pass");
+  };
 
   const handleLockedDeck = () => {
     Alert.alert(
-      "Full deck locked",
+      "Deck locked",
       "This deck will be part of the full version.",
-      [
-        {
-          text: "Not Now",
-          style: "cancel",
-        },
-        {
-          text: "Continue",
-          style: "default",
-        },
-      ],
+      [{ text: "Close", style: "cancel" }],
+      { cancelable: true }
+    );
+  };
+
+  const handleEmptyDeck = () => {
+    Alert.alert(
+      "No cards loaded",
+      "This deck does not have cards loaded in this build.",
+      [{ text: "Close", style: "cancel" }],
       { cancelable: true }
     );
   };
 
   const handleSelectDeck = (deckId: DeckId) => {
+    const deck = decks.find((item) => item.id === deckId);
     const isUnlocked = unlockedDeckIds.includes(deckId);
+    const hasCards = deckHasCards(deckId);
 
-    if (!isUnlocked) {
+    if (!deck) return;
+
+    if (deck.isLocked || !isUnlocked) {
       handleLockedDeck();
+      return;
+    }
+
+    if (!hasCards) {
+      handleEmptyDeck();
       return;
     }
 
@@ -58,37 +109,95 @@ export default function DecksScreen() {
   };
 
   const handleRandomizeAll = () => {
+    if (availableDeckIds.length === 0) {
+      Alert.alert(
+        "No cards available",
+        "There are no unlocked cards available for Random Mix.",
+        [{ text: "Close", style: "cancel" }],
+        { cancelable: true }
+      );
+      return;
+    }
+
     selectRandomize(availableDeckIds);
     startCardFlow({ activeDeckIds: availableDeckIds });
   };
 
-  const renderItem = ({ item }: { item: (typeof decks)[number] }) => {
-    const isUnlocked = unlockedDeckIds.includes(item.id);
-    const deckStatus = isUnlocked ? (item.isFree ? "FREE" : "UNLOCKED") : "LOCKED";
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: (typeof decks)[number];
+    index: number;
+  }) => {
+    const cardCount = getCardCountForDeck(item.id);
+    const isUnlocked = unlockedDeckIds.includes(item.id) && !item.isLocked;
+    const hasCards = cardCount > 0;
+    const isPlayable = isUnlocked && hasCards;
+
+    const status = !isUnlocked || item.isLocked
+      ? "LOCKED"
+      : item.isFree
+        ? "FREE"
+        : `${cardCount} CARDS`;
 
     return (
-      <Pressable
+      <DeckMiniCard
+        name={item.name}
+        description={item.shortDescription}
+        status={status}
+        accentColor={deckAccentMap[item.id]}
+        rotation={deckRotations[index] ?? "0deg"}
+        disabled={!isPlayable}
         onPress={() => handleSelectDeck(item.id)}
-        style={[styles.tile, !isUnlocked && styles.lockedTile]}
-        accessibilityRole="button"
-        accessibilityLabel={`${item.name}. ${item.shortDescription}. ${deckStatus}`}
-      >
-        <View style={styles.tileTopRow}>
-          <Text style={styles.tileTitle}>{item.name.toUpperCase()}</Text>
-          <Text style={styles.deckStatus}>{deckStatus}</Text>
-        </View>
-
-        <Text style={styles.tileBody}>{item.shortDescription}</Text>
-      </Pressable>
+        accessibilityLabel={`${item.name}. ${item.shortDescription}. ${status}`}
+      />
     );
   };
 
   return (
-    <AppScreen>
+    <PaperScreen style={styles.screenContent}>
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <View />
-          <HeaderGear onPress={() => setSettingsVisible(true)} />
+          <Pressable
+            onPress={handleBack}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            style={styles.topAction}
+          >
+            <Text style={styles.topActionText}>← Back</Text>
+          </Pressable>
+
+          <View style={styles.topRightActions}>
+            <Pressable
+              onPress={() => router.push("/favorites")}
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel="Open favorite cards"
+              style={styles.favoriteNavButton}
+            >
+              <Text style={styles.favoriteNavText}>♥</Text>
+
+              {favorites.length > 0 && (
+                <View style={styles.favoriteCountBadge}>
+                  <Text style={styles.favoriteCountText}>
+                    {favorites.length > 99 ? "99+" : favorites.length}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+
+            <Pressable
+              onPress={() => setSettingsVisible(true)}
+              hitSlop={14}
+              accessibilityRole="button"
+              accessibilityLabel="Open settings"
+              style={styles.settingsButton}
+            >
+              <Text style={styles.settingsText}>⚙︎</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.header}>
@@ -105,116 +214,145 @@ export default function DecksScreen() {
           scrollEnabled={false}
         />
 
-        <Pressable
-          onPress={handleRandomizeAll}
-          style={styles.randomizeButton}
-          accessibilityRole="button"
-          accessibilityLabel="Random Mix. Pull from unlocked decks."
-        >
-          <Text style={styles.randomizeText}>RANDOM MIX</Text>
-          <Text style={styles.randomizeSubtext}>Pull from unlocked decks.</Text>
-        </Pressable>
+        <View style={styles.randomWrap}>
+          <RaisedButton
+            title="RANDOM MIX"
+            variant="gold"
+            onPress={handleRandomizeAll}
+            disabled={availableDeckIds.length === 0}
+            accessibilityLabel={`Random Mix. Pull from ${availableDeckIds.length} available decks.`}
+          />
 
-        <Text
-          style={styles.backText}
-          onPress={() =>
-            router.replace(session.isPlayerlessMode ? "/setup" : "/pass")
-          }
-        >
-          Back
-        </Text>
+          <Text style={styles.randomSubtext}>
+            Pull from{" "}
+            <Text style={styles.randomStrong}>
+              {availableDeckIds.length} available deck
+              {availableDeckIds.length === 1 ? "" : "s"}
+            </Text>
+          </Text>
+        </View>
 
         <SettingsModal
           visible={settingsVisible}
           onClose={() => setSettingsVisible(false)}
         />
       </View>
-    </AppScreen>
+    </PaperScreen>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContent: {
+    paddingHorizontal: 18,
+    paddingTop: 14,
+    paddingBottom: 18,
+  },
   container: {
     flex: 1,
   },
   topRow: {
-    height: 44,
+    height: 38,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  header: {
-    marginTop: spacing.sm,
-    marginBottom: spacing.lg,
+  topAction: {
+    minWidth: 78,
+    height: 38,
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
-  title: {
-    color: colors.cream,
-    fontSize: 34,
-    lineHeight: 38,
+  topActionText: {
+    color: paperColors.ink,
+    fontSize: 17,
     fontWeight: "700",
   },
-  listContent: {
-    gap: spacing.md,
+  topRightActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: paperSpacing.sm,
   },
-  columnWrap: {
-    gap: spacing.md,
-    marginBottom: spacing.md,
-  },
-  tile: {
-    flex: 1,
-    minHeight: 110,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 6,
-    padding: spacing.sm,
-    backgroundColor: "rgba(255,255,255,0.03)",
-    justifyContent: "space-between",
-  },
-  lockedTile: {
-    opacity: 0.48,
-  },
-  tileTopRow: {
-    gap: spacing.xs,
-  },
-  tileTitle: {
-    color: colors.cream,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  deckStatus: {
-    color: colors.gold,
-    fontSize: 9,
-    fontWeight: "700",
-    letterSpacing: 1,
-  },
-  tileBody: {
-    color: colors.mutedCream,
-    fontSize: 11,
-    lineHeight: 14,
-  },
-  randomizeButton: {
-    marginTop: spacing.md,
-    minHeight: 54,
-    borderRadius: 999,
+  favoriteNavButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    borderWidth: 2.2,
+    borderColor: paperColors.ink,
+    backgroundColor: paperColors.terracotta,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.terracotta,
-    gap: 2,
+    position: "relative",
   },
-  randomizeText: {
-    color: colors.cream,
-    fontSize: 14,
-    fontWeight: "700",
+  favoriteNavText: {
+    color: paperColors.paper,
+    fontSize: 21,
+    lineHeight: 23,
+    fontWeight: "800",
   },
-  randomizeSubtext: {
-    color: colors.cream,
-    opacity: 0.82,
-    fontSize: 11,
+  favoriteCountBadge: {
+    position: "absolute",
+    top: -7,
+    right: -7,
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1.6,
+    borderColor: paperColors.ink,
+    backgroundColor: paperColors.gold,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
   },
-  backText: {
-    color: colors.mutedCream,
-    fontSize: 13,
+  favoriteCountText: {
+    color: paperColors.ink,
+    fontSize: 9,
+    fontWeight: "900",
+  },
+  settingsButton: {
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  settingsText: {
+    color: paperColors.ink,
+    fontSize: 28,
+    lineHeight: 30,
+  },
+  header: {
+    marginTop: 18,
+    marginBottom: 24,
+  },
+  title: {
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 39,
+    lineHeight: 43,
+    fontWeight: "600",
+    marginBottom: 20,
+  },
+  listContent: {
+    gap: 14,
+    paddingBottom: 8,
+  },
+  columnWrap: {
+    gap: 16,
+    marginBottom: 14,
+  },
+  randomWrap: {
+    marginTop: "auto",
+    gap: paperSpacing.md,
+    paddingTop: 22,
+    paddingBottom: 2,
+  },
+  randomSubtext: {
+    color: paperColors.ink,
+    opacity: 0.72,
+    fontSize: 16,
     textAlign: "center",
-    marginTop: spacing.md,
+  },
+  randomStrong: {
+    fontWeight: "800",
+    opacity: 1,
   },
 });

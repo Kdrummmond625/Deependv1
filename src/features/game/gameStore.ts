@@ -25,6 +25,7 @@ const defaultSession: GameSession = {
 
   usedCardIds: [],
   skippedCardIds: [],
+  skippedCards: [],
 
   cardsDiscussed: 0,
   cardsSinceLastPass: 0,
@@ -150,17 +151,24 @@ export const useGameStore = create<GameState>((set, get) => ({
         };
       }
 
-      const trimmedHistory =
-        state.session.historyIndex >= 0
-          ? state.session.cardHistory.slice(0, state.session.historyIndex + 1)
+      const currentCardId = state.session.currentCardId;
+      const currentIndex = currentCardId
+        ? state.session.cardHistory.indexOf(currentCardId)
+        : state.session.historyIndex;
+
+      const baseHistory =
+        currentIndex >= 0
+          ? state.session.cardHistory.slice(0, currentIndex + 1)
           : state.session.cardHistory;
+
+      const nextHistory = [...baseHistory, cardId];
 
       return {
         session: {
           ...state.session,
           currentCardId: cardId,
-          cardHistory: [...trimmedHistory, cardId],
-          historyIndex: trimmedHistory.length,
+          cardHistory: nextHistory,
+          historyIndex: nextHistory.length - 1,
           isDeckComplete: false,
         },
       };
@@ -218,19 +226,25 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   skipCard: (cardId) => {
     set((state) => {
-      if (state.session.skippedCardIds.includes(cardId)) {
-        return {
-          session: {
-            ...state.session,
-            currentCardId: null,
-          },
-        };
-      }
+      const currentPlayerName = state.session.isPlayerlessMode
+        ? null
+        : state.session.players[state.session.currentPlayerIndex] ?? null;
+
+      const alreadyQueued = state.session.skippedCardIds.includes(cardId);
 
       return {
         session: {
           ...state.session,
-          skippedCardIds: [...state.session.skippedCardIds, cardId],
+          skippedCardIds: alreadyQueued
+            ? state.session.skippedCardIds
+            : [...state.session.skippedCardIds, cardId],
+          skippedCards: [
+            ...state.session.skippedCards,
+            {
+              cardId,
+              skippedByPlayerName: currentPlayerName,
+            },
+          ],
           currentCardId: null,
         },
       };
@@ -240,9 +254,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   goBackInHistory: () => {
     const { session } = get();
 
-    if (session.historyIndex <= 0) return null;
+    const currentCardId = session.currentCardId;
 
-    const previousIndex = session.historyIndex - 1;
+    if (!currentCardId) return null;
+
+    const currentIndex = session.cardHistory.indexOf(currentCardId);
+
+    if (currentIndex <= 0) return null;
+
+    const previousIndex = currentIndex - 1;
     const previousCardId = session.cardHistory[previousIndex];
 
     set((state) => ({
