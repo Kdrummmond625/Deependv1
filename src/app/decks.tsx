@@ -19,19 +19,13 @@ import {
 import { startCardFlow } from "@/features/game/startCardFlow";
 import { useGameStore } from "@/features/game/gameStore";
 import { useFavoritesStore } from "@/features/favorites/favoritesStore";
+import { useAccessStore } from "@/features/access/accessStore";
+import {
+  canAccessDeck,
+  getAccessibleDeckIds,
+  isDeckFree,
+} from "@/features/access/accessRules";
 import { DeckId } from "@/types/deck";
-
-const TEST_FULL_ACCESS = true;
-
-const unlockedDeckIds = TEST_FULL_ACCESS
-  ? (decks.map((deck) => deck.id) as DeckId[])
-  : (decks.filter((deck) => deck.isFree).map((deck) => deck.id) as DeckId[]);
-
-const availableDeckIds = getDeckIdsWithCards(
-  decks
-    .filter((deck) => unlockedDeckIds.includes(deck.id) && !deck.isLocked)
-    .map((deck) => deck.id) as DeckId[]
-);
 
 const deckAccentMap: Record<DeckId, string> = {
   ask_assume: paperColors.terracotta,
@@ -59,23 +53,32 @@ export default function DecksScreen() {
   const favorites = useFavoritesStore((state) => state.favorites);
   const hydrateFavorites = useFavoritesStore((state) => state.hydrateFavorites);
 
+  const unlockedProductIds = useAccessStore(
+    (state) => state.unlockedProductIds
+  );
+  const hydrateAccess = useAccessStore((state) => state.hydrateAccess);
+
   const [settingsVisible, setSettingsVisible] = useState(false);
 
-  useEffect(() => {
-    void hydrateFavorites();
-  }, [hydrateFavorites]);
+  const accessibleDeckIds = getAccessibleDeckIds(unlockedProductIds);
+
+  const availableDeckIds = getDeckIdsWithCards(
+    decks
+      .filter((deck) => accessibleDeckIds.includes(deck.id) && !deck.isLocked)
+      .map((deck) => deck.id) as DeckId[]
+  );
+
+ useEffect(() => {
+  void hydrateFavorites();
+  void hydrateAccess();
+}, [hydrateFavorites, hydrateAccess]);
 
   const handleBack = () => {
     router.replace(session.isPlayerlessMode ? "/setup" : "/pass");
   };
 
   const handleLockedDeck = () => {
-    Alert.alert(
-      "Deck locked",
-      "This deck will be part of the full version.",
-      [{ text: "Close", style: "cancel" }],
-      { cancelable: true }
-    );
+    router.push("/paywall");
   };
 
   const handleEmptyDeck = () => {
@@ -89,12 +92,12 @@ export default function DecksScreen() {
 
   const handleSelectDeck = (deckId: DeckId) => {
     const deck = decks.find((item) => item.id === deckId);
-    const isUnlocked = unlockedDeckIds.includes(deckId);
+    const isAccessible = canAccessDeck(deckId, unlockedProductIds);
     const hasCards = deckHasCards(deckId);
 
     if (!deck) return;
 
-    if (deck.isLocked || !isUnlocked) {
+    if (deck.isLocked || !isAccessible) {
       handleLockedDeck();
       return;
     }
@@ -131,15 +134,16 @@ export default function DecksScreen() {
     index: number;
   }) => {
     const cardCount = getCardCountForDeck(item.id);
-    const isUnlocked = unlockedDeckIds.includes(item.id) && !item.isLocked;
+    const isAccessible = canAccessDeck(item.id, unlockedProductIds);
     const hasCards = cardCount > 0;
-    const isPlayable = isUnlocked && hasCards;
+    const isPlayable = isAccessible && hasCards && !item.isLocked;
 
-    const status = !isUnlocked || item.isLocked
-      ? "LOCKED"
-      : item.isFree
-        ? "FREE"
-        : `${cardCount} CARDS`;
+    const status =
+      !isAccessible || item.isLocked
+        ? "LOCKED"
+        : isDeckFree(item.id)
+          ? "FREE"
+          : `${cardCount} CARDS`;
 
     return (
       <DeckMiniCard
@@ -309,8 +313,8 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   settingsButton: {
-    width: 50,
-    height: 50,
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -329,7 +333,6 @@ const styles = StyleSheet.create({
     fontSize: 39,
     lineHeight: 43,
     fontWeight: "600",
-    marginBottom: 20,
   },
   listContent: {
     gap: 14,

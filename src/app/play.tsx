@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  Vibration,
+  View,
+} from "react-native";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { SettingsModal } from "@/components/SettingsModal";
@@ -10,6 +18,7 @@ import { RaisedButton } from "@/components/paper/RaisedButton";
 import {
   paperColors,
   paperFonts,
+  paperRadii,
   paperSpacing,
   paperType,
 } from "@/constants/paperTheme";
@@ -25,7 +34,6 @@ import {
   getFavoritesIntroShown,
   setFavoritesIntroShown,
 } from "@/features/favorites/favoritesStorage";
-import { useHapticTimer } from "@/hooks/useHapticTimer";
 import { formatDeckName } from "@/utils/formatDeckName";
 
 export default function PlayScreen() {
@@ -43,6 +51,8 @@ export default function PlayScreen() {
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const [settingsVisible, setSettingsVisible] = useState(false);
+  const [timerPromptVisible, setTimerPromptVisible] = useState(false);
+  const [timerResetKey, setTimerResetKey] = useState(0);
 
   useEffect(() => {
     void hydrateFavorites();
@@ -65,16 +75,14 @@ export default function PlayScreen() {
     ? favorites.some((favorite) => favorite.cardId === currentCard.id)
     : false;
 
-  useHapticTimer({
-    cardId: currentCard?.id ?? null,
-    minutes: settings.hapticTimerMinutes,
-    enabled: settings.hapticsEnabled,
-  });
+const fireHaptic = () => {
+  if (!settings.hapticsEnabled) return;
 
-  const fireHaptic = () => {
-    if (!settings.hapticsEnabled) return;
-    void Haptics.selectionAsync();
-  };
+  void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    .catch(() => {
+      Vibration.vibrate(50);
+    });
+};
 
   const loadNextCardFromLatestState = () => {
     const latestSession = useGameStore.getState().session;
@@ -101,6 +109,7 @@ export default function PlayScreen() {
 
     if (!latestCard || latestSession.isDeckComplete) return;
 
+    setTimerPromptVisible(false);
     fireHaptic();
 
     markCardDiscussed(latestCard.id, latestCard.deckId);
@@ -128,6 +137,7 @@ export default function PlayScreen() {
 
     if (latestSession.historyIndex <= 0 && currentHistoryIndex <= 0) return;
 
+    setTimerPromptVisible(false);
     fireHaptic();
     goBackInHistory();
   };
@@ -138,10 +148,17 @@ export default function PlayScreen() {
 
     if (!latestCard || latestSession.isDeckComplete) return;
 
+    setTimerPromptVisible(false);
     fireHaptic();
 
     skipCard(latestCard.id);
     loadNextCardFromLatestState();
+  };
+
+  const handleKeepTalking = () => {
+    setTimerPromptVisible(false);
+    setTimerResetKey((value) => value + 1);
+    fireHaptic();
   };
 
   const handleToggleFavorite = async () => {
@@ -185,6 +202,32 @@ export default function PlayScreen() {
       { cancelable: true }
     );
   };
+
+  useEffect(() => {
+    setTimerPromptVisible(false);
+    setTimerResetKey(0);
+  }, [currentCard?.id]);
+
+  useEffect(() => {
+  if (!currentCard || isEmptyState) return;
+  if (!settings.hapticsEnabled) return;
+  if (timerPromptVisible) return;
+
+  const timerMs = settings.hapticTimerMinutes * 60 * 1000;
+
+  const timeout = setTimeout(() => {
+    setTimerPromptVisible(true);
+  }, timerMs);
+
+  return () => clearTimeout(timeout);
+}, [
+  currentCard?.id,
+  isEmptyState,
+  settings.hapticTimerMinutes,
+  settings.hapticsEnabled,
+  timerPromptVisible,
+  timerResetKey,
+]);
 
   return (
     <PaperScreen>
@@ -282,6 +325,51 @@ export default function PlayScreen() {
           visible={settingsVisible}
           onClose={() => setSettingsVisible(false)}
         />
+
+        <Modal
+          visible={timerPromptVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={handleKeepTalking}
+        >
+          <View style={styles.timerOverlay}>
+            <Pressable
+              style={styles.timerBackdrop}
+              onPress={handleKeepTalking}
+              accessibilityRole="button"
+              accessibilityLabel="Keep talking"
+            />
+
+            <View style={styles.timerPromptWrap}>
+              <View style={styles.timerPromptShadow} />
+
+              <View style={styles.timerPromptCard}>
+                <View style={styles.timerBadge}>
+                  <Text style={styles.timerBadgeText}>TIME CHECK</Text>
+                </View>
+
+                <Text style={styles.timerTitle}>Still on this card?</Text>
+
+                <Text style={styles.timerBody}>
+                  Stay with it, or move to the next one.
+                </Text>
+
+                <View style={styles.timerActions}>
+                  <RaisedButton
+                    title="KEEP TALKING"
+                    variant="secondary"
+                    onPress={handleKeepTalking}
+                  />
+
+                  <RaisedButton
+                    title="NEXT CARD →"
+                    onPress={advanceToNextCard}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     </PaperScreen>
   );
@@ -389,5 +477,71 @@ const styles = StyleSheet.create({
     opacity: 0.52,
     fontSize: 16,
     marginHorizontal: -2,
+  },
+  timerOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(7, 21, 18, 0.55)",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24,
+  },
+  timerBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  timerPromptWrap: {
+    width: "100%",
+    maxWidth: 340,
+    position: "relative",
+  },
+  timerPromptShadow: {
+    position: "absolute",
+    top: 7,
+    left: 7,
+    right: -7,
+    bottom: -7,
+    backgroundColor: paperColors.ink,
+    borderRadius: paperRadii.lg,
+  },
+  timerPromptCard: {
+    backgroundColor: paperColors.paperLight,
+    borderWidth: 3,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.lg,
+    padding: paperSpacing.lg,
+    alignItems: "center",
+    gap: paperSpacing.md,
+  },
+  timerBadge: {
+    backgroundColor: paperColors.gold,
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.pill,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  timerBadgeText: {
+    ...paperType.label,
+    color: paperColors.ink,
+    letterSpacing: 2,
+  },
+  timerTitle: {
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 27,
+    lineHeight: 31,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  timerBody: {
+    color: paperColors.ink,
+    opacity: 0.68,
+    fontSize: 15,
+    lineHeight: 21,
+    textAlign: "center",
+  },
+  timerActions: {
+    width: "100%",
+    gap: paperSpacing.md,
+    marginTop: paperSpacing.sm,
   },
 });

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   FlatList,
   Modal,
@@ -19,9 +20,11 @@ import {
   paperType,
 } from "@/constants/paperTheme";
 import { decks } from "@/data/decks";
-import { getCardById } from "@/features/game/cardEngine";
+import { canAccessDeck } from "@/features/access/accessRules";
+import { useAccessStore } from "@/features/access/accessStore";
 import { useFavoritesStore } from "@/features/favorites/favoritesStore";
 import { FavoriteCardRecord } from "@/features/favorites/favoritesTypes";
+import { getCardById } from "@/features/game/cardEngine";
 import { formatDeckName } from "@/utils/formatDeckName";
 
 function cleanPrompt(prompt: string) {
@@ -58,13 +61,19 @@ export default function FavoritesScreen() {
   const hydrateFavorites = useFavoritesStore((state) => state.hydrateFavorites);
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
+  const unlockedProductIds = useAccessStore(
+    (state) => state.unlockedProductIds
+  );
+  const hydrateAccess = useAccessStore((state) => state.hydrateAccess);
+
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [selectedFavorite, setSelectedFavorite] =
     useState<FavoriteCardRecord | null>(null);
 
   useEffect(() => {
-    void hydrateFavorites();
-  }, [hydrateFavorites]);
+  void hydrateFavorites();
+  void hydrateAccess();
+}, [hydrateFavorites, hydrateAccess]);
 
   const sortedFavorites = useMemo(() => {
     return sortFavoritesByDeck(favorites).filter((favorite) =>
@@ -76,11 +85,19 @@ export default function FavoritesScreen() {
     ? getCardById(selectedFavorite.cardId)
     : null;
 
+  const selectedCardIsAccessible = selectedCard
+    ? canAccessDeck(selectedCard.deckId, unlockedProductIds)
+    : false;
+
   const handleRemoveSelected = async () => {
     if (!selectedFavorite) return;
 
     await removeFavorite(selectedFavorite.cardId);
     setSelectedFavorite(null);
+  };
+
+  const handleLockedFavorite = () => {
+    router.push("/paywall");
   };
 
   return (
@@ -137,6 +154,43 @@ export default function FavoritesScreen() {
               if (!card) return null;
 
               const deckLabel = formatDeckName(card.deckId).toUpperCase();
+              const isAccessible = canAccessDeck(
+                card.deckId,
+                unlockedProductIds
+              );
+
+              if (!isAccessible) {
+                return (
+                  <Pressable
+                    onPress={handleLockedFavorite}
+                    accessibilityRole="button"
+                    accessibilityLabel="Locked favorite card. Unlock this deck to view it."
+                    style={styles.favoriteWrap}
+                  >
+                    <View style={styles.favoriteShadow} />
+
+                    <View style={[styles.favoriteCard, styles.lockedCard]}>
+                      <View style={styles.favoriteHeader}>
+                        <View style={styles.lockedDeckPill}>
+                          <Text style={styles.lockedDeckPillText}>
+                            {deckLabel}
+                          </Text>
+                        </View>
+
+                        <View style={styles.lockIconCircle}>
+  <FontAwesome name="lock" size={13} color={paperColors.paper} />
+</View>
+                      </View>
+
+                      <Text style={styles.lockedTitle}>Locked favorite</Text>
+
+                      <Text style={styles.lockedBody}>
+                        Unlock this deck to view this card again.
+                      </Text>
+                    </View>
+                  </Pressable>
+                );
+              }
 
               return (
                 <Pressable
@@ -214,11 +268,27 @@ export default function FavoritesScreen() {
                   </Pressable>
                 </View>
 
-                <Text style={styles.modalPrompt}>
-                  {selectedCard ? cleanPrompt(selectedCard.prompt) : ""}
-                </Text>
+                {selectedCard && selectedCardIsAccessible ? (
+                  <Text style={styles.modalPrompt}>
+                    {cleanPrompt(selectedCard.prompt)}
+                  </Text>
+                ) : (
+                  <View style={styles.modalLockedBlock}>
+                    <Text style={styles.lockedTitle}>Locked favorite</Text>
+                    <Text style={styles.lockedBody}>
+                      Unlock this deck to view this card again.
+                    </Text>
+                  </View>
+                )}
 
                 <View style={styles.modalActions}>
+                  {!selectedCardIsAccessible && (
+                    <RaisedButton
+                      title="UNLOCK BASE GAME"
+                      onPress={() => router.push("/paywall")}
+                    />
+                  )}
+
                   <RaisedButton
                     title="REMOVE FAVORITE"
                     variant="danger"
@@ -313,6 +383,9 @@ const styles = StyleSheet.create({
     padding: paperSpacing.md,
     gap: paperSpacing.md,
   },
+  lockedCard: {
+    backgroundColor: paperColors.paperMuted,
+  },
   favoriteHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -331,17 +404,54 @@ const styles = StyleSheet.create({
     color: paperColors.ink,
     letterSpacing: 1.7,
   },
+  lockedDeckPill: {
+    backgroundColor: paperColors.paper,
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    opacity: 0.72,
+  },
+  lockedDeckPillText: {
+    ...paperType.label,
+    color: paperColors.ink,
+    letterSpacing: 1.7,
+  },
   heart: {
     color: paperColors.terracotta,
     fontSize: 24,
     fontWeight: "900",
   },
+  lockIconCircle: {
+  width: 28,
+  height: 28,
+  borderRadius: 14,
+  borderWidth: 2,
+  borderColor: paperColors.ink,
+  backgroundColor: paperColors.terracotta,
+  alignItems: "center",
+  justifyContent: "center",
+},
   promptPreview: {
     color: paperColors.ink,
     fontFamily: paperFonts.serif,
     fontSize: 20,
     lineHeight: 27,
     fontWeight: "600",
+  },
+  lockedTitle: {
+    color: paperColors.ink,
+    fontFamily: paperFonts.serif,
+    fontSize: 22,
+    lineHeight: 27,
+    fontWeight: "700",
+  },
+  lockedBody: {
+    color: paperColors.ink,
+    opacity: 0.62,
+    fontSize: 13,
+    lineHeight: 19,
   },
   emptyWrap: {
     position: "relative",
@@ -447,7 +557,18 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     fontWeight: "600",
   },
+  modalLockedBlock: {
+    minHeight: 140,
+    borderWidth: 2.5,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.md,
+    backgroundColor: paperColors.paperMuted,
+    padding: paperSpacing.lg,
+    justifyContent: "center",
+    gap: paperSpacing.sm,
+  },
   modalActions: {
     marginTop: paperSpacing.xl,
+    gap: paperSpacing.md,
   },
 });

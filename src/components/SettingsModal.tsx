@@ -1,5 +1,9 @@
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
+import {
+  shouldShowDevPurchaseControls,
+  shouldUseRevenueCat,
+} from "@/features/revenuecat/revenueCatConfig";
 import { PaperStepper } from "@/components/paper/PaperStepper";
 import { RaisedButton } from "@/components/paper/RaisedButton";
 import {
@@ -9,6 +13,8 @@ import {
   paperSpacing,
   paperType,
 } from "@/constants/paperTheme";
+import { BASE_GAME_PRODUCT_ID } from "@/features/access/accessRules";
+import { useAccessStore } from "@/features/access/accessStore";
 import { useGameStore } from "@/features/game/gameStore";
 
 type SettingsModalProps = {
@@ -24,6 +30,21 @@ export function SettingsModal({
 }: SettingsModalProps) {
   const settings = useGameStore((state) => state.settings);
   const updateSettings = useGameStore((state) => state.updateSettings);
+
+  const unlockedProductIds = useAccessStore(
+    (state) => state.unlockedProductIds
+  );
+  const unlockProduct = useAccessStore((state) => state.unlockProduct);
+  const lockProduct = useAccessStore((state) => state.lockProduct);
+  const syncRevenueCatAccess = useAccessStore(
+    (state) => state.syncRevenueCatAccess
+  );
+  const isSyncingRevenueCatAccess = useAccessStore(
+    (state) => state.isSyncingRevenueCatAccess
+  );
+
+  const baseGameIsUnlocked = unlockedProductIds.includes(BASE_GAME_PRODUCT_ID);
+  const showDevPurchaseControls = shouldShowDevPurchaseControls();
 
   const handleReplayTutorial = () => {
     onClose();
@@ -56,6 +77,67 @@ export function SettingsModal({
     updateSettings({
       hapticsEnabled: !settings.hapticsEnabled,
     });
+  };
+
+  const handleUnlockBaseGame = () => {
+    unlockProduct(BASE_GAME_PRODUCT_ID);
+  };
+
+  const handleResetBaseGame = () => {
+    Alert.alert(
+      "Reset Base Game access?",
+      "This will lock the Base Game again for testing.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: () => lockProduct(BASE_GAME_PRODUCT_ID),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleRestorePurchases = async () => {
+    if (!shouldUseRevenueCat()) {
+      Alert.alert(
+        "Restore unavailable",
+        "Purchases are not available in this build."
+      );
+      return;
+    }
+
+    try {
+      const { restoreRevenueCatPurchases } = await import(
+        "@/features/revenuecat/revenueCatService"
+      );
+
+      const restoredBaseGame = await restoreRevenueCatPurchases();
+
+      if (restoredBaseGame) {
+        await syncRevenueCatAccess();
+
+        Alert.alert(
+          "Purchases restored",
+          "Base Game access has been restored."
+        );
+        return;
+      }
+
+      Alert.alert(
+        "No purchases found",
+        "No Base Game purchase was found for this Apple ID."
+      );
+    } catch {
+      Alert.alert(
+        "Restore failed",
+        "Purchases could not be restored. Try again later."
+      );
+    }
   };
 
   return (
@@ -125,17 +207,17 @@ export function SettingsModal({
               <View style={styles.toggleAccent} />
 
               <View style={styles.toggleCopy}>
-                <Text style={styles.toggleTitle}>Haptics</Text>
-                <Text style={styles.toggleBody}>
-                  Interaction feedback and timer nudges.
-                </Text>
+                <Text style={styles.toggleTitle}>Time Check</Text>
+<Text style={styles.toggleBody}>
+  Shows a reminder when a card has been open for a while.
+</Text>
               </View>
 
               <Pressable
                 onPress={toggleHaptics}
                 accessibilityRole="switch"
                 accessibilityState={{ checked: settings.hapticsEnabled }}
-                accessibilityLabel="Toggle haptics"
+                accessibilityLabel="Toggle time check"
                 style={[
                   styles.switchTrack,
                   !settings.hapticsEnabled && styles.switchOff,
@@ -150,10 +232,54 @@ export function SettingsModal({
               </Pressable>
             </View>
 
+            {showDevPurchaseControls && (
+              <View style={styles.accessPanel}>
+                <Text style={styles.accessLabel}>DEV TESTING ONLY</Text>
+
+                <Text style={styles.accessStatus}>
+                  Base Game:{" "}
+                  <Text style={styles.accessStatusStrong}>
+                    {baseGameIsUnlocked ? "Unlocked" : "Locked"}
+                  </Text>
+                </Text>
+
+                <View style={styles.accessActions}>
+                  <RaisedButton
+                    title={
+                      baseGameIsUnlocked
+                        ? "BASE GAME UNLOCKED"
+                        : "UNLOCK BASE GAME"
+                    }
+                    variant="gold"
+                    onPress={handleUnlockBaseGame}
+                    disabled={baseGameIsUnlocked}
+                  />
+
+                  <RaisedButton
+                    title="RESET BASE GAME LOCK"
+                    variant="danger"
+                    onPress={handleResetBaseGame}
+                    disabled={!baseGameIsUnlocked}
+                  />
+                </View>
+              </View>
+            )}
+
             <View style={styles.actions}>
               <RaisedButton
-                title="REPLAY TUTORIAL"
+                title={
+                  isSyncingRevenueCatAccess
+                    ? "RESTORING..."
+                    : "RESTORE PURCHASES"
+                }
                 variant="gold"
+                onPress={handleRestorePurchases}
+                disabled={isSyncingRevenueCatAccess}
+              />
+
+              <RaisedButton
+                title="REPLAY TUTORIAL"
+                variant="secondary"
                 onPress={handleReplayTutorial}
               />
 
@@ -327,6 +453,32 @@ const styles = StyleSheet.create({
   },
   switchThumbOn: {
     alignSelf: "flex-end",
+  },
+  accessPanel: {
+    borderWidth: 2,
+    borderColor: paperColors.ink,
+    borderRadius: paperRadii.md,
+    backgroundColor: paperColors.paper,
+    padding: paperSpacing.md,
+    marginBottom: paperSpacing.lg,
+    gap: paperSpacing.sm,
+  },
+  accessLabel: {
+    color: paperColors.terracotta,
+    fontSize: 10,
+    letterSpacing: 2,
+    fontWeight: "900",
+  },
+  accessStatus: {
+    color: paperColors.ink,
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  accessStatusStrong: {
+    fontWeight: "900",
+  },
+  accessActions: {
+    gap: paperSpacing.sm,
   },
   actions: {
     gap: paperSpacing.md,
